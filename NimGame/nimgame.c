@@ -38,6 +38,7 @@ game_t* game_create(int row, int column, int mines) {
         }
     }
     
+    srand(time(0));
     while (mines) {
         x = rand() % (row);
         y = rand() % (column);
