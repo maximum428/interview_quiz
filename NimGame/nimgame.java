@@ -8,7 +8,7 @@ public class Game {
         if ((rows * columns) < nimes) throw new IllegalArgumentException("ERROR: the numbers of nimes are larger than board size.");
 
         this._nimes = nimes;
-        board = new int[this._columns=columns][this._rows=rows];  //[this._columns=columns];
+        board = new int[this._columns=columns][this._rows=rows];
         while (0 < nimes) {
             int x = ThreadLocalRandom.current().nextInt(0, this._rows);
             int y = ThreadLocalRandom.current().nextInt(0, this._columns);
@@ -51,7 +51,7 @@ public class Game {
 
             if (x < (this._rows - 1)) numOfNimes += board[y][x+1]; // right
 
-            if (y < (this._columns - 1)) numOfNimes += board[y+1][x]; // botton */
+            if (y < (this._columns - 1)) numOfNimes += board[y+1][x]; // botton
         } catch (ArrayIndexOutOfBoundsException e) {
             return "IndexOutOfBoundsException: " + e.getMessage();
         }
