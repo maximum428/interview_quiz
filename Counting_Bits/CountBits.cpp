@@ -104,6 +104,6 @@ i    bin       '1'    i&(i-1)
 int main() {
     int n = 5;
     Solution solution;
-    for (auto i : solution.CountBits4(5))
+    for (auto i : solution.CountBits4(n))
         std::cout << i << " ";
 }
