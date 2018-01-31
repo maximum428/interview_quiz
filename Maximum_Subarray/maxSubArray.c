@@ -8,14 +8,12 @@ int maxSubArray(int* nums, int numsSize) {
     int f[numsSize];
     
     f[0] = nums[0];
+    max = nums[0];
     for (i = 1; i < numsSize; i++) {
         f[i] = MAX(nums[i] + f[i - 1], nums[i]);
-    }
-    
-    max = f[0];
-    for (i = 1; i < numsSize; i++) {
         max = MAX(max, f[i]);
     }
+    
     return max;
 }
 
