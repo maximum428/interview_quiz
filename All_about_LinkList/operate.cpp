@@ -1,3 +1,12 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
 #include <iostream>
 
 class Solution {
@@ -6,6 +15,16 @@ public:
         auto next = node->next;
         *node = *next;
         delete next;
+    }
+    ListNode* reverseList(ListNode* head_ref) {
+        ListNode *prev = NULL, *current = head_ref, *tmp;
+        while (current) {
+            tmp = current->next;
+            current->next = prev;
+            prev = current;
+            current = tmp;
+        }
+        return prev;
     }
     void deleteNode(ListNode* head_ref, int value) {
         ListNode* current = head_ref;
@@ -16,6 +35,19 @@ public:
             }
             current = current->next;
         }
+    }
+    void removeHelper(ListNode *&head, int value) {
+        if (head == nullptr) return;
+        else if (head->val == value) {
+            head = head->next;
+            removeHelper(head, value);
+        } else {
+            removeHelper(head->next, value);
+        }
+    }
+    ListNode* deleteNodes(ListNode* head_ref, int value) {
+        removeHelper(head_ref, value);
+        return head_ref;
     }
     void deleteList(ListNode* head_ref) {
         ListNode* current = head_ref;
@@ -104,7 +136,12 @@ int main() {
     node = head;
     */
     solution.printList(node);
+    node = solution.reverseList(node);
+    cout << "==================\n";
+    solution.printList(node);
+    solution.deleteNodes(node, 3);
     solution.printNthNode(node, 2);
+    /*
     solution.appendNode(node, 5);
     cout << "---------------\n";
     solution.printList(node);
@@ -116,7 +153,7 @@ int main() {
     //cout << "==============\n";
     //solution.printList(node);
     cout << "node val: " << node->next->val << endl;
-    
+    */
     //solution.deleteList(node);
     if (node != NULL) delete node;
 }
