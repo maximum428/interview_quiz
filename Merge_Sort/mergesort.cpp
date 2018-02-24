@@ -9,42 +9,34 @@ public:
             MergeSort(arr, low, mid);
             MergeSort(arr, mid+1, high);
             
-            Merge(arr, low, high, mid);
+            Merge(arr, low, mid, high);
         }
     }
 private:
-    void Merge(int *arr, int low, int high, int mid) {
-        int i, j, k, tmp[high-low+1];
-        i = low;
-        k = 0;
-        j = mid + 1;
+    void merge(int* arr, int low, int mid, int high) {
+        int i, j, k;
+        int n1 = mid - low + 1;
+        int n2 = high - mid;
+        int L[n1], R[n2];
+    
+        for (i = 0; i < n1; i++)
+            L[i] = arr[low + i];
+        for (j = 0; j < n2; j++)
+            R[j] = arr[mid + j + 1];
         
-        while (i <= mid && j <= high) {
-            if (arr[i] < arr[j]) {
-                tmp[k] = arr[i];
-                k++;
-                i++;
-            } else {
-                tmp[k] = arr[j];
-                k++;
-                j++;
-            }
-        }
-        
-        while (i <= mid) {
-            tmp[k] = arr[i];
-            k++;
-            i++;
-        }
-        while (j <= high) {
-            tmp[k] = arr[j];
-            k++;
-            j++;
+        i = 0; j = 0; k = low;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j])
+                arr[k++] = L[i++];
+            else
+                arr[k++] = R[j++];
         }
         
-        for (i = low; i <= high; i++) {
-            arr[i] = tmp[i - low];
-        }
+        while (i < n1)
+            arr[k++] = L[i++];
+    
+        while (j < n2)
+            arr[k++] = R[j++];
     }
 };
 
