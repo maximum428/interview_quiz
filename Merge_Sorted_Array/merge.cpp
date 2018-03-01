@@ -15,10 +15,7 @@ public:
                 nums1[k--] = nums1[i--];
             } else if (nums1[i] < nums2[j]) {
                 nums1[k--] = nums2[j--];
-            } else {
-                nums1[k--] = nums1[i--];
-                nums1[k--] = nums2[j--];
-            }
+            } 
         }
         while (i >= 0) {
             nums1[k--] = nums1[i--];
