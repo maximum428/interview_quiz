@@ -70,6 +70,26 @@ int lengthOfLIS(vector<int>& nums) {
         ans = max(ans, LIS(nums, i));
     return ans;
 }
+
+//O(nlogn)
+int lengthOfLIS2(vector<int>& nums) {
+    vector<int> tails(nums.size(), 0);
+    int res = 0;
+    for (auto num : nums) {
+        int i = 0, j = res;
+        while (i != j) {
+            int mid = (i + j) / 2;
+            if (tails[mid] < num) {
+                i = mid + 1;
+            } else {
+                j = mid;
+            }
+        }
+        tails[i] = num;
+        if (i == res) ++res;
+    }
+    return res;
+}
 int main() {
     vector<int> vec = { 5, 2, 6, 3, 4, 7, 5};
     cout << lengthOfLIS(vec) << endl;
