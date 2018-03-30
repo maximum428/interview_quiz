@@ -29,9 +29,9 @@ string add_Two_Binary(string str1, string str2) {
         carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
         cout << "carry: " << carry << endl;
     }
-    if (carry)
-        result = '1' + result;
-    return result;
+    //if (carry)
+    //    result = '1' + result;
+    return carry ? '1' + result : result;
 }
 
 int main() {
