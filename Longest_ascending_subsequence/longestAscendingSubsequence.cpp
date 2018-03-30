@@ -10,6 +10,8 @@ int findLargest(vector<int>& m, int left, int right, int target) {
     }
     return right;
 }
+
+//O(nlogn)
 int longestAscendingSubsequence(vector<int> nums) {
     if (nums.size() == 0) return 0;
     // m[] 數組紀錄到目前為止最優的最長升序列
@@ -32,7 +34,45 @@ int longestAscendingSubsequence(vector<int> nums) {
     return result;
 }
 
+//O(n^2)
+int longestIncresingSubseq(vector<int> nums) {
+    if (nums.size() == 0) return 0;
+    vector<int> f(nums.size(), 1);
+    
+    for (int i = 0; i < nums.size(); i++) {
+        for (int j = 0; j < i; j++) {
+            if (nums[i] > nums[j])
+                f[i] = max(f[i], f[j] + 1);
+        }
+    }
+    return *max_element(f.begin(), f.end());
+}
+
+vector<int> f_;
+
+int LIS(const vector<int>& nums, int r) {
+    if (r == 0) return 1;
+    if (f_[r] > 0) return f_[r];
+    int ans = 1;
+    for (int i = 0; i < r; i++)
+        if (nums[r] > nums[i])
+            ans = max(ans, LIS(nums, i) + 1);
+    f_[r] = ans;
+    return f_[r];
+}
+
+int lengthOfLIS(vector<int>& nums) {
+    int n = nums.size();
+    if (n == 0) return 0;
+    f_ = vector<int>(n, 0);
+    int ans = 0;
+    for (int i = 0; i < n; ++i) 
+        ans = max(ans, LIS(nums, i));
+    return ans;
+}
 int main() {
     vector<int> vec = { 5, 2, 6, 3, 4, 7, 5};
+    cout << lengthOfLIS(vec) << endl;
+    cout << longestIncresingSubseq(vec) << endl;
     cout << longestAscendingSubsequence(vec) << endl;
 }
