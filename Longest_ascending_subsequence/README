@@ -1,0 +1,6 @@
+Given an array A[0]...A[n-1] of integers, find out the length of the longest ascending subsequence.
+Example:
+Input: A = {5, 2, 6, 3, 4, 7, 5}
+Output: 4; [2, 3, 4, 5] is the longest ascending subsequence.
+
+O(nlogn)
