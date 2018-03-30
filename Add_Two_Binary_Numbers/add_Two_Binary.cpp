@@ -30,7 +30,7 @@ string add_Two_Binary(string str1, string str2) {
         cout << "carry: " << carry << endl;
     }
     if (carry)
-        result += '1';  // + result;
+        result = '1' + result;
     return result;
 }
 
