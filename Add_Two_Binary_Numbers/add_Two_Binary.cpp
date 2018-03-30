@@ -25,7 +25,7 @@ string add_Two_Binary(string str1, string str2) {
         cout << "bit1: " << bit1 << "; bit2: " << bit2 << endl;
         int sum = (bit1 ^ bit2 ^ carry) + '0';
         cout << "sum: " << sum << endl;
-        result += (char)sum; // + result;
+        result = (char)sum + result;
         carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
         cout << "carry: " << carry << endl;
     }
