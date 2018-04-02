@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int majorityElement(vector<int>& nums) {\
+    int majorityElement(vector<int>& nums) {
         int majority = nums[0];
         int res = nums.size() / 2;
         unordered_map<int, int> counts;
