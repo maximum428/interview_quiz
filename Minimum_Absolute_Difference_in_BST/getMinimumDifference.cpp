@@ -19,7 +19,7 @@ public:
     void inorder(TreeNode* root) {
         if (!root) return;
         inorder(root->left);
-        if (_prev) min_diff = min(min_diff, root->val - *_prev);
+        if (_prev) min_diff = min(min_diff, abs(root->val - *_prev));
         _prev = &root->val;
         inorder(root->right);
     }
