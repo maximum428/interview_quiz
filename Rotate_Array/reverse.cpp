@@ -20,6 +20,22 @@ public:
         for (auto n :nums)
             cout << n << " ";
     }
+    
+    void rotate4(vector<int>& nums, int k) {
+        if (nums.size() == 0) return;
+        k = k % nums.size();
+    
+        while (k--) {
+            int pre = nums[0];
+            for (int i = 1; i < nums.size(); i++) {
+                int tmp = nums[i];
+                nums[i] = pre;
+                pre = tmp;
+            }
+            nums[0] = pre;
+        }
+    }
+    
     void rotate1(vector<int>& nums, int k) {
         vector<int> vec(nums.size(), 0);
         for (int i = 0; i < nums.size(); i++) {
