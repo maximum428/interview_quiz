@@ -1,0 +1,27 @@
+Given a sorted circular linked list and k value, you need to insert a value to a position that makes the sorted list.
+For example:
+
+Input:
+K = 8
+5 -> 6 -> 7 -> 10 -> 12    (circular list)
+^                     |
+|_____________________|
+
+Output:
+5 -> 6 -> 7 -> 8 -> 10 -> 12
+^                          |
+|__________________________|
+
+Input:
+K = 13
+Output:
+5 -> 6 -> 7 -> 8 -> 10 -> 12 -> 13
+^                               |
+|_______________________________|
+
+Input:
+K = 2
+Output:
+2 -> 5 -> 6 -> 7 -> 8 -> 12
+^                         |
+|_________________________|
