@@ -6,6 +6,7 @@ typedef struct Node {
     Node(int value) : val(value), left(nullptr), right(nullptr) {}
 } Node_t;
 */
+
 class Node {
 public:
     int val;
