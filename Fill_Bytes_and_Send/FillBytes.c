@@ -47,6 +47,7 @@ void method2(Data *data) {
     while (sizeof(data) - nr) {
         nr += MIN(fread(data+nr, 1, sizeof(Data)-nr, fd), sizeof(Data) - nr);
     }
+    sendData(data);
 }
 
 int main(void) {
