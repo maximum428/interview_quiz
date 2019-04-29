@@ -220,6 +220,34 @@ void reverse(Node **head) {
     *head = prev;
 }
 
+Node *getLastNode(Node *head) {
+    if (head == nullptr)
+        return nullptr;
+    
+    Node *current = head;
+    while (current->next != nullptr) {
+        current = current->next;
+    }
+    
+    return current;
+}
+
+void reverseTraversal(Node *head, Node *tail) {
+    Node *current, *prev;
+    if (tail != nullptr) {
+        current = tail;
+        while (current != head) {
+            prev = head;
+            while (prev->next != current) {
+                prev = prev->next;
+            }
+            cout << current->val << " ";
+            current = prev;
+        }
+        cout << current->val << endl;
+    }
+}
+
 int main() {
     vector<int> vec = { 9, 3, 2, 5, 1, 8 };
     Node *head = nullptr;
@@ -240,6 +268,10 @@ int main() {
     //printListNode(head);
     remove_by_all_value(&head, 8);
     printListNode(head);
+    
+    Node *tail = getLastNode(head);
+    cout << "Last Node: " << tail->val << endl;
+    reverseTraversal(head, tail);
     /*
     pop_back(head);
     printListNode(head);
