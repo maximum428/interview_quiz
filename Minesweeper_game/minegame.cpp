@@ -4,13 +4,15 @@ class MineGame {
 public:
     MineGame(int rows, int columns, int mines) : _rows(rows), _columns(columns), _mines(mines) {
         srand(time(0));
+        board = vector<vector<unsigned int>>(rows, vector<unsigned int>(columns, 0));
+        /*
         for (int i = 0; i < _rows; i++) {
             vector<unsigned int> myrow;
             for (int j = 0; j < _columns; j++) {
                 myrow.push_back(0);
             }
             board.push_back(myrow);
-        }
+        }*/
         
         while (_mines--) {
             int x = rand() % _rows;
