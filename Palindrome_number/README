@@ -1,0 +1,9 @@
+Check if the given non-negative number is palindrome.
+
+Examples:
+
+Input: n = 54545
+Output: 1 (true)
+
+Input: n = 999991
+Output: 0 (false)
