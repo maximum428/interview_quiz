@@ -1,0 +1,6 @@
+Max value for given number of n digits
+
+computes the maximum value of a number for a given number
+of digits, e.g. using the base 10 system the maximum number we can have
+made up of 4 digits is the number 999910. Similarly the maximum number that
+consists of 4 digits for a base 2 number is 11112 which is 1510.
