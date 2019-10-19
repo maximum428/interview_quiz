@@ -1,0 +1,4 @@
+Give an array of chars and specific char.  find distances of all chars between the specific char.
+for example:
+   Input:  vec = ['f', 'r', 'e', 'e', 'w', 'i', 'r', 'e'], k = 'e';
+   Output:  [2, 1, 0, 0, 1, 2, 1, 0]
