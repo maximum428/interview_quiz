@@ -2,7 +2,7 @@ int LogestTurbulence(vector<int>& nums) {
     vector<pair<int,int>> up(nums.size()), down(nums.size());
     up[0] = {1, 0};
     down[0] = {1, 0};
-    int up_max = INT_MIN, down_max = INT_MIN;
+    int up_max = 1, down_max = 1;
     
     for (int i = 1; i < nums.size(); i++) {
         if (nums[i] < nums[i-1]) {
