@@ -1,4 +1,4 @@
-void backtrack(vector<int>& nums, vector<vector<int>>& res, vector<int>& vec, int start) {
+void backtrack(vector<int>& nums, vector<vector<int>>& res, vector<int>& vec) {  //, int start) {
         if (vec.size() == nums.size()) {
             res.push_back(vec);
             return;
@@ -8,7 +8,7 @@ void backtrack(vector<int>& nums, vector<vector<int>>& res, vector<int>& vec, in
             if (find(vec.begin(), vec.end(), nums[i]) != vec.end())
                 continue;
             vec.push_back(nums[i]);
-            backtrack(nums, res, vec, i+1);
+            backtrack(nums, res, vec); // , i+1);
             vec.pop_back();
         }
 }
