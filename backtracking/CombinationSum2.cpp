@@ -1,18 +1,21 @@
-void helper(vector<vector<int>>& res, vector<int>& vec, int k, int start, int n) {
-        if (vec.size() == k && n == 0) {
-            res.push_back(vec);
+void backtrack(vector<int>& candidates, vector<vector<int>>& res, vector<int>& nums, int target, int start) {
+        if (!target) {
+            res.push_back(nums);
             return;
         }
-        for (int i = start; i <= 9; i++) {
-            vec.push_back(i);
-            helper(res, vec, k, i+1, n-i);
-            vec.pop_back();
+        for (int i = start; i < candidates.size() && target >= candidates[i]; i++) {
+            if (i == start || candidates[i] != candidates[i-1]) {
+                nums.push_back(candidates[i]);
+                backtrack(candidates, res, nums, target - candidates[i], i+1);
+                nums.pop_back();
+            }
         }
-}
-vector<vector<int>> combinationSum3(int k, int n) {
+    }
+    
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
         vector<vector<int>> res;
-        vector<int> vec;
-        
-        helper(res, vec, k, 1, n);
+        vector<int> nums;
+        sort(candidates.begin(), candidates.end());
+        backtrack(candidates, res, nums, target, 0);
         return res;
-}
+    }
