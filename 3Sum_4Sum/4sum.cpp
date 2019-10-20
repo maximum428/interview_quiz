@@ -12,7 +12,7 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
             while (third < four) {
                 int sum = nums[i] + nums[j] + nums[third] + nums[four];
                 if (sum < target)
-                    third--;
+                    third++;
                 else if (sum > target)
                     four--;
                 else {
@@ -24,5 +24,5 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
             }
         }
     }
-    
+    return res;
 }
