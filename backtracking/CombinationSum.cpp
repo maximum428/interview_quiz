@@ -5,7 +5,7 @@ void backtrack(vector<int>& candidates, vector<vector<int>>& res, vector<int>& n
         }
         for (int i = start; i < candidates.size() && target >= candidates[i]; i++) {
             nums.push_back(candidates[i]);
-            backtrack(candidates, res, nums, target - candidates[i], i);
+            backtrack(candidates, res, nums, target - candidates[i], i);  // not i + 1 because we can reuse same elements
             nums.pop_back();
         }
 }
