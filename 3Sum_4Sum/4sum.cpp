@@ -18,8 +18,8 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
                 else {
                     vector<int> m = {nums[i], nums[j], nums[third], nums[four]};
                     res.push_back(m);
-                    while (third < four && nums[third] == nums[third+1]) third++;
-                    while (third < four && nums[four] == nums[four-1]) four--;
+                    while (third < four && nums[third] == m[2]) third++;
+                    while (third < four && nums[four] == m[3]) four--;
                 }
             }
         }
