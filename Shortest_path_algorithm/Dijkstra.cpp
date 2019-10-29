@@ -14,15 +14,16 @@ int minDistance(vector<int>& dp, vector<bool>& visited) {
     return min_index;
 }
 
-vector<int> dijkstra(vector<vector<int>>& graph) {
+vector<int> dijkstra(vector<vector<int>>& graph, int vertex) {
     if (graph.size() == 0) return {};
     
     int size = graph[0].size();
+    if (vertex >= size) return {};
     
     vector<int> dp(size, INT_MAX);
     vector<bool> visited(size);
     
-    dp[0] = 0;
+    dp[vertex] = 0;
     
     for (int i = 0; i < size - 1; i++) {
         int u = minDistance(dp, visited);
@@ -47,6 +48,7 @@ int main() {
                                  { 0, 0, 0, 0, 0, 2, 0, 1, 6 }, 
                                  { 8, 11, 0, 0, 0, 0, 1, 0, 7 }, 
                                  { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
-    vector<int> res = dijkstra(graph);
+    int vertex = 3;
+    vector<int> res = dijkstra(graph, vertex);
     print(res);
 }
