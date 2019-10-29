@@ -1,0 +1,4 @@
+Given a graph and a source vertex in the graph, find shortest paths from source to all vertices in the given graph.
+
+https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+
