@@ -34,7 +34,7 @@ void receive(uint8_t *bytes, uint8_t nbytes) {
 
 void method1(Data *data) {
     ssize_t nr = fread(data, 1, sizeof(Data), fd);
-    while (nr < sizeof(Data) {
+    while (nr < sizeof(Data)) {
         ssize_t rr = fread(data+nr, 1, sizeof(Data)-nr, fd);
         if (rr >= 0)
             nr += rr;
@@ -43,7 +43,7 @@ void method1(Data *data) {
 }
            
 void method2(Data *data) {
-    ssize nr = 0;
+    ssize_t nr = 0;
     while (sizeof(data) - nr) {
         nr += MIN(fread(data+nr, 1, sizeof(Data)-nr, fd), sizeof(Data) - nr);
     }
