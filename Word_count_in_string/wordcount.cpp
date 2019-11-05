@@ -3,6 +3,7 @@
 using namespace std;
 
 #if 1
+#if 1
 int WordCount(string str) {
     int start = 0, end = 0, count = 0;
     while (end < str.length()) {
@@ -16,6 +17,16 @@ int WordCount(string str) {
     }
     return count;
 }
+#else
+int WordCount(string str){
+    stringstream ss(str);
+    string word;
+    int count = 0;
+    
+    while (ss >> word)
+        count++;
+    return count;
+#endif
 #else
 int WordCount(string str) {
     if (str.length() == 0)
