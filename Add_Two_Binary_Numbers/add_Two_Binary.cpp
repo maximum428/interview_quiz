@@ -34,7 +34,24 @@ string add_Two_Binary(string str1, string str2) {
     return carry ? '1' + result : result;
 }
 
+int add_two_binary(int x, int y){
+    int carry = 0, res = 0;
+    for (int i = 0; i < 32; i++) {
+        int bit1 = x & 1;
+        int bit2 = y & 1;
+        int sum = (bit1 ^ bit2 ^ carry);
+        res |= sum << i;
+        carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
+        x >>= 1;
+        y >>= 1;
+    }
+    return carry ? res |= 1 << 32 : res;
+}
+
 int main() {
     string str1 = "1100011", str2 = "10";
     cout << "Sum is " << add_Two_Binary(str1, str2);
+    
+    int x = 5, y = 3;
+    cout << "Sum is " << add_two_binary(x, y) << endl;
 }
