@@ -64,6 +64,15 @@ Tree_Node* insert2(Tree_Node* root, int value) {
     return root;
 }
 
+#if 1
+void insertIterative(Tree_Node* &root, int value) {
+    if (root == nullptr) {
+        root = new Tree_Node(value);
+        return;
+    }
+    
+    Tree_Node *current = root, *parent = nullptr;
+#else
 void insertIterative(Tree_Node **root, int value) {
     if (*root == nullptr) {
         *root = new Tree_Node(value);
@@ -71,6 +80,7 @@ void insertIterative(Tree_Node **root, int value) {
     }
     
     Tree_Node *current = *root, *parent = nullptr;
+#endif
     while (current != nullptr) {
         parent = current;
         
@@ -202,7 +212,11 @@ int main() {
     for (int v : vec) {
         //insert(root, v);
         //root = insert2(root, v);
+#if 1
+        insertIterative(root, v);
+#else
         insertIterative(&root, v);
+#endif
     }
     
     printTreeNode(root);
