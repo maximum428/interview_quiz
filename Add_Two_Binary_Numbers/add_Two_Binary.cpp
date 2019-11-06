@@ -51,5 +51,5 @@ int main() {
     cout << "Sum is " << add_Two_Binary(str1, str2);
     
     int x = 5, y = 3;
-    cout << "Sum is " << add_two_binary(x, y) << endl;
+    cout << "Sum is " << bitset<32>(add_two_binary(x, y)) << endl;
 }
