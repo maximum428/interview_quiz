@@ -36,14 +36,12 @@ string add_Two_Binary(string str1, string str2) {
 
 int add_two_binary(int x, int y){
     int carry = 0, res = 0;
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 32; i++, x >>= 1, y >>= 1) {
         int bit1 = x & 1;
         int bit2 = y & 1;
         int sum = (bit1 ^ bit2 ^ carry);
         res |= sum << i;
         carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
-        x >>= 1;
-        y >>= 1;
     }
     return carry ? res |= 1 << 32 : res;
 }
