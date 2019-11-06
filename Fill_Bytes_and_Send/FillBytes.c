@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include <stdint.h>
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+//#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#define MAX(x, y) (x ^ ((x ^ y) & -(x < y)))
+//#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MIN(x, y) (y ^ ((x ^ y) & -(x < y)))
 
 void receive(uint8_t *bytes, uint8_t nbytes) {
     static int curlength = 0;
