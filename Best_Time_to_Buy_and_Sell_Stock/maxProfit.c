@@ -1,5 +1,7 @@
-#define MIN(a, b) (((a)<(b))?(a):(b))
-#define MAX(a, b) (((a)>(b))?(a):(b))
+//#define MIN(a, b) (((a)<(b))?(a):(b))
+#define MIN(a, b) (b ^ ((a ^b) & -(a < b)))
+//#define MAX(a, b) (((a)>(b))?(a):(b))
+#define MAX(a, b) (a ^ ((a ^ b) & -(a < b)))
 
 int maxProfit(int* prices, int pricesSize) {
     int i, min_price, max_profit;
