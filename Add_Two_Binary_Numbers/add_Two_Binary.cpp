@@ -34,6 +34,21 @@ string add_Two_Binary(string str1, string str2) {
     return carry ? '1' + result : result;
 }
 
+string addBinary(string a, string b) {
+    string res;
+    int carry = 0, ac = a.length() - 1, bc = b.length() - 1;
+        
+    while (ac >= 0 || bc >= 0 || carry == 1) {
+        if (ac >= 0)
+            carry += a[ac--] - '0';
+        if (bc >= 0)
+            carry += b[bc--] - '0';
+        res = (char)(carry % 2 + '0') + res;
+        carry /= 2;
+    }
+    return res;
+}
+
 int add_two_binary(int x, int y){
     int carry = 0, res = 0;
     for (int i = 0; i < 32; i++, x >>= 1, y >>= 1) {
