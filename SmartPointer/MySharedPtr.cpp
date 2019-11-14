@@ -7,7 +7,7 @@ public:
       ptr = p;
       count = new int(1);
    }
-   MySharedPtr(MySharedPtr<T> &p) {
+   MySharedPtr(const MySharedPtr<T> &p) {
       ptr = p.ptr;
       *(p.count) = *(p.count) + 1;
       count = p.count;
