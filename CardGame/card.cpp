@@ -36,6 +36,11 @@ public:
     Deck() {
         string Suits[] = {"Diamond", "Hearts", "Clubs", "Spades"};
         string Values[] = { "Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen"};
+#if 1
+        for (int i = 0; i < 52; i++) {
+            cards[i].suit = Suits[i % 4];
+            cards[i].value = Values[i % 13];
+#else
         int start = 0;
         for (auto suit : Suits) {
             int i = 0;
@@ -45,6 +50,7 @@ public:
             }
             start = i+1;
         }
+#endif
     }
     void shuffle() {
         srand(time(0));
