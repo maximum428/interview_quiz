@@ -28,7 +28,13 @@ public:
     }
     */
     Cell<T> operator+(const Cell<T> &cell2) {
+ #if 1
+        Cell<T> cell;
+        cell.x = this->x + cell2.x;
+        cell.y = this->y + cell2.y;
+ #else
         Cell<T> cell(this->x + cell2.x, this->y + cell2.y);
+ #endif
         cell.value = this->value + cell2.value;
         return cell;
     }
