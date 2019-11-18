@@ -59,7 +59,7 @@ class MusicPlayer {
 public:
     enum State { ST_STOPPED, ST_PLAYING, ST_PAUSED };
     MusicePlayer() : m_pState(new StoppedState()) {}
-    virtural ~MusicPlayer() {
+    virtual ~MusicPlayer() {
         delete m_pState;
     }
     void Play() {
