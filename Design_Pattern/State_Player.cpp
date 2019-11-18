@@ -22,7 +22,7 @@ private:
     string m_name;
 };
 
-class PlayState : public MusicPlayerState {
+class PlayingState : public MusicPlayerState {
     PlayingState() : MusticPlayerState(string("Playing")) {}
     virtual ~PlayingState() {}
     virtual void Pause(MusicPlayer *player) {
