@@ -23,7 +23,7 @@ private:
 };
 
 class PlayingState : public MusicPlayerState {
-    PlayingState() : MusticPlayerState(string("Playing")) {}
+    PlayingState() : MusicPlayerState(string("Playing")) {}
     virtual ~PlayingState() {}
     virtual void Pause(MusicPlayer *player) {
         player->setState(MusicPlayer::ST_PAUSED);
@@ -35,7 +35,7 @@ class PlayingState : public MusicPlayerState {
 
 class PauseState : public MusicPlayerState {
 public:
-    PausedState();
+    PausedState() : MusicPalyerState(string("Paused")) {}
     virtual ~PausedState();
     
     virtual void Play(MusicPlayer *player) {
@@ -48,7 +48,7 @@ public:
 
 class StoppedState : public MusicPlayerState {
 public:
-    StoppedState() : MusticPlayerState(string("Stopped")) {}
+    StoppedState() : MusicPlayerState(string("Stopped")) {}
     virtual ~StoppedState() {}
     virtual void Play(MusticPlayer *player) {
         player->SetState(MusicPlayer::ST_PLAYING);
