@@ -11,9 +11,10 @@ int smallestSubarray(vector<int> vec, int x) {
         }
         
         while (curr_sum > x && start < len) {
-            if (end - start < min_len) {
+            min_len = min(min_len, end - start);
+            /*if (end - start < min_len) {
                 min_len = end - start;
-            }
+            } */
             
             curr_sum -= vec[start++];
         }
