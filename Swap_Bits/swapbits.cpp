@@ -5,7 +5,7 @@ int swapBits(unsigned int n, unsigned int p1, unsigned int p2) {
     unsigned int x = (bit1 ^ bit2);
     
     x = (x << p1) | ( x << p2);
-    unsigned int result = n ^ x;
+    return n ^ x;
 }
 
 int main() {
