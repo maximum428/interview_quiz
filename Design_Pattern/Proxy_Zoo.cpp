@@ -2,76 +2,83 @@
 
 using namespace std;
 
-class ZooPatron {
+class ZooCustomer {
 public:
-    ZooPatron(string name) : m_name(name) {}
-    virtual ~ZooPatron() {}
-    string GetName() { return m_name; }
+    ZooCustomer(string name) : m_Name(name) {}
+    virtual ~ZooCustomer() {}
+    string GetName() { return m_Name; }
     virtual bool HasAnimalShowAccess() = 0;
     virtual bool HasEarlyAccess() = 0;
 private:
-    string m_name;
+    string m_Name;
 };
 
-class ZooMember : public ZooPatron {
+class ZooMember : public ZooCustomer {
 public:
-    ZooMember(string name) : ZooPatron(name) {}
+    ZooMember(string name): ZooCustomer(name) {}
     virtual ~ZooMember() {}
-    virtual bool HasAnimalShowAccess() { return true; }
-    virtual bool HasEarlyAccess() { return true; }
+    virtual bool HasAnimalShowAccess() {
+        return true;
+    }
+    virtual bool HasEarlyAccess() {
+        return false;
+    }
 };
 
-class ZooGuest : public ZooPatron {
+class ZooGuest : public ZooCustomer {
 public:
-    ZooGuest(string name) : ZooPatron(name) {}
+    ZooGuest(string name) : ZooCustomer(name) {}
     virtual ~ZooGuest() {}
-    virtual bool HasAnimalShowAccess() { return false; }
-    virtual bool HasEarlyAccess() { return false; }
+    virtual bool HasAnimalShowAccess() {
+        return false;
+    }
+    virtual bool HasEarlyAccess() {
+        return true;
+    }
 };
 
-class ZooIF {
+class ZooInterface {
 public:
-    virtual void EnterZooEarly(ZooPatron *patron) = 0;
-    virtual void AttendAnimalShow(ZooPatron *patron) = 0;
+    virtual void EnterZooEarly(ZooCustomer *customer) {}
+    virtual void AttenAnimalShow(ZooCustomer *customer) {}
 };
 
-class Zoo {
+class Zoo : public ZooInterface {
 public:
     Zoo() {}
-    virtual ~Zoo() {}
-    virtual void EnterZooEarly(ZooPatron *patron) {
-        cout << "Welcome, " << patron->GetName() << ", to our early access zoo hours\n";
+    ~Zoo() {}
+    void EnterZooEarly(ZooCustomer *customer) {
+        cout << "Welcome, " << customer->GetName() << ", to our early access zoo hours\n";
     }
-    virtual void AttendAnimalShow(ZooPatron *patron) {
-        cout << "Welcome, " << patron->GetName() << ", to our animal show\n";
+    void AttendAnimalShow(ZooCustomer *customer) {
+        cout << "Welcome, " << customer->GetName() << ", to our animal show\n";
     }
 };
 
-class ZooProxy {
+class ZooProxy : public ZooInterface {
 public:
-    ZooProxy(Zoo *zoo) : m_pZoo(zoo) {}
-    virtual ~ZooProxy() {}
-    virtual void EnterZooEarly(ZooPatron *patron) {
-        if (patron->HasEarlyAccess()) {
-            m_pZoo->EnterZooEarly(patron);
+    ZooProxy(Zoo *zoo) : m_Zoo(zoo) {}
+    ~ZooProxy() {}
+    void EnterZooEarly(ZooCustomer *customer) {
+        if (customer->HasEarlyAccess()) {
+            m_Zoo->EnterZooEarly(customer);
         } else {
-            cout << "Sorry, " << patron->GetName() << ", you don't have early zoo access privileges\n";
+            cout << "Sorry, " << customer->GetName() << ", you don't have early zoo access privileges\n";
         }
     }
-    
-    virtual void AttendAnimalShow(ZooPatron *patron) {
-        if (patron->HasAnimalShowAccess()) {
-            m_pZoo->AttendAnimalShow(patron);
+    void AttendAnimalShow(ZooCustomer *customer) {
+        if (customer->HasAnimalShowAccess()) {
+            m_Zoo->AttendAnimalShow(customer);
         } else {
-            cout << "Sorry, " << patron->GetName() << ", you don't have access to the animal show\n";
+            cout << "Sorry, " << customer->GetName() << ", you don't have access to the animal show\n";
         }
     }
 private:
-    Zoo *m_pZoo;
+    Zoo *m_Zoo;
 };
 
 int main() {
-    ZooMember member(string("Nicklas"));
+    ZooMember member(string("Niclas"));
     ZooGuest guest(string("Bob"));
     
     Zoo zoo;
