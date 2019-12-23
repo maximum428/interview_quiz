@@ -1,5 +1,5 @@
 int threeSumSmaller(vector<int>& nums, int target) {
-    int (nums.size() < 3) return 0;
+    if (nums.size() < 3) return 0;
     sort(nums.begin(), nums.end());
     int count = 0;
     
