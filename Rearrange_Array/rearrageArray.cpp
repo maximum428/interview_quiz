@@ -1,6 +1,14 @@
 void rearrange(vector<int>& nums) {
 #if 1
     if (*max_element(nums.begin(), nums.end()) != nums.size()-1) return;
+    unordered_set<int> st;
+    for (int i = 0; i < nums.size(); i++) {
+        if (st.find(nums[i]) != st.end()) {
+            cout << "duplicated element\n";
+            return;
+        }
+        st.insert(nums[i]);
+    }
     
     for (int i = 0; i < nums.size(); i++)
         nums[i %nums.size()] = i % nums.size();
