@@ -1,4 +1,10 @@
 void rearrange(vector<int>& nums) {
+#if 1
+    if (*max_element(nums.begin(), nums.end()) != nums.size()-1) return;
+    
+    for (int i = 0; i < nums.size(); i++)
+        nums[i %nums.size()] = i % nums.size();
+#else
     if (*max_element(nums.begin(), nums.end()) != nums.size()-1) return;
     vector<bool> visited(nums.size());
     
@@ -14,6 +20,7 @@ void rearrange(vector<int>& nums) {
         if (!visited[i])
             nums[i] = i;
     }
+#endif
 }
 
 int main() {
