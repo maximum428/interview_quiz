@@ -220,6 +220,25 @@ void reverse(Node **head) {
     *head = prev;
 }
 
+Node* reverseBetween(Node* head, int m, int n){
+    if (head == NULL || m > n) return head;
+    
+    Node *dummy = new ListNode(0), *prev = dummy, *tmp;
+    prev->next = head;
+    
+    for (int i = 0; i < m - 1; i++)
+        prev = prev->next;
+    
+    head = prev->next;
+    for (int i = 1; i <= n-m; i++) {
+        tmp = prev->next;
+        prev->next = head->next;
+        head->next = head->next->next;
+        prev->next->next = tmp;
+    }
+    return dummy->next;
+}
+
 Node *getLastNode(Node *head) {
     if (head == nullptr)
         return nullptr;
