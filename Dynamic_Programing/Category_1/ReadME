@@ -63,7 +63,21 @@ Note:
 1. 1 <= S.length <= 20000
 2. S only consists of '0' and '1' characters.
 ================================================================================================
-Question 3: Minimum Swaps To Make Sequences Increasing
+Question 3: Minimum number of swaps required to sort an array
+
+Given an array of n distinct elements, find the minimum number of swaps required to sort the array.
+
+Examples:
+
+Input : {4, 3, 2, 1}
+Output : 2
+Explanation : Swap index 0 with 3 and 1 with 2 to 
+              form the sorted array {1, 2, 3, 4}.
+
+Input : {1, 5, 4, 3, 2}
+Output : 2
+================================================================================================
+Question 4: Minimum Swaps To Make Sequences Increasing
 
 We have two integer sequences A and B of the same non-zero length.
 
