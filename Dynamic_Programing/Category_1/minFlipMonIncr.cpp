@@ -48,7 +48,7 @@ int minFlipsMonoIncr(string S) {
             flipZero_one[i] = min(flipOne_zero[i-1], flipZero_one[i-1]);
             flipOne_zero[i] = 1 + flipOne_zero[i-1];
         } else {
-            flipOne_zero[i] = min(flipZero_one[i], flipOne_zero[i-1]);
+            flipOne_zero[i] = flipOne_zero[i-1];   // min(flipZero_one[i], flipOne_zero[i-1]);
             flipZero_one[i] = 1+ flipZero_one[i-1];
         }
     }
