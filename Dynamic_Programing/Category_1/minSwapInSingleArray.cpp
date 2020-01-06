@@ -4,20 +4,21 @@ int minSwapInSingleArray(vector<int> vec) {
     int n = vec.size();
     pair<int, int> arrpos[n];
     for (int i = 0; i < n; i++) {
-        arrpos[i].first = vec[i];
-        arrpos[i].second = i;
+        arrpos[i] = {vec[i], i};
+        //arrpos[i].first = vec[i];
+        //arrpos[i].second = i;
     }
         
     sort(arrpos, arrpos+n);
-    vector<bool> visted(n, false);
+    vector<bool> visited(n, false);
     int ans = 0;
     for (int i = 0; i < n; i++) {
-        if (visted[i] || arrpos[i].second == i)
+        if (visited[i] || arrpos[i].second == i)
             continue;
         int cycle_size = 0;
         int j = i;
-        while (!visted[j]) {
-            visted[j] = true;
+        while (!visited[j]) {
+            visited[j] = true;
             j = arrpos[j].second;
             cycle_size++;
         }
