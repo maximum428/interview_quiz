@@ -36,6 +36,25 @@ int minFlipMonoIncr2(string s) {
     return ans;
 }
 
+int minFlipsMonoIncr(string S) {
+    vector<int> flipOne_zero(S.length(), INT_MAX);
+    vector<int> flipZero_one(S.length(), INT_MAX);
+        
+    flipOne_zero[0] = S[0] == '1' ? 1 : 0;
+    flipZero_one[0] = S[0] == '1' ? 0 : 1;
+        
+    for (int i = 1; i < S.length(); i++) {
+        if (S[i] == '1') {
+            flipZero_one[i] = min(flipOne_zero[i-1], flipZero_one[i-1]);
+            flipOne_zero[i] = 1 + flipOne_zero[i-1];
+        } else {
+            flipOne_zero[i] = min(flipZero_one[i], flipOne_zero[i-1]);
+            flipZero_one[i] = 1+ flipZero_one[i-1];
+        }
+    }
+    return min(flipZero_one.back(), flipOne_zero.back());
+}
+
 int main() {
     string s = "00011000";
     cout << minFlipMonoIncr(s) << endl;
