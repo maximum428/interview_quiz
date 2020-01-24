@@ -10,11 +10,12 @@ public:
             int first = q.top();
             q.pop();
             if (!q.empty()) {
-            int second = q.top();
-            q.pop();
-            int sum = first + second;
-            res += sum;
-            q.push(sum);
+                int second = q.top();
+                q.pop();
+                int sum = first + second;
+                res += sum;
+                q.push(sum);
+            }
         }
         return res;
     }
