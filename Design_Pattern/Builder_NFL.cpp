@@ -1,3 +1,6 @@
+/*
+The Builder Pattern allows you to encapsulate the construction of a product and allow it to be constructed in steps.
+*/
 #include <iostream>
 
 using namespace std;
