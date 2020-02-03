@@ -1,47 +1,18 @@
 int LogestTurbulence(vector<int>& nums) {
-    vector<pair<int,int>> up(nums.size()), down(nums.size());
-    up[0] = {1, 0};
-    down[0] = {1, 0};
-    int up_max = 1, down_max = 1;
-    
+    vector<int> up(nums.size(), 1), down(nums.size(), 1);
+    //up[0] = 1;
+    //down[0] = 1;
+    int res = 0;
     for (int i = 1; i < nums.size(); i++) {
-        if (nums[i] < nums[i-1]) {
-            if (up[i-1].second < 0)
-                up[i].first = 1 + up[i-1].first;
-            else
-                up[i].first = up[i-1].first;
-            up[i].second = -1 * (nums[i] - nums[i-1]);
-        } else if (nums[i] > nums[i-1]) {
-            if (up[i-1].second < 0)
-                up[i].first = up[i-1].first;
-            else
-                up[i].first = 1 + up[i-1].first;
-            up[i].second = -1 * (nums[i] - nums[i-1]);
-        } else
-            up[i] = {1, 0};
-
-        up_max = max(up_max, up[i].first);
+        if (nums[i] > nums[i - 1]) {
+            up[i] = down[i - 1] + 1;
+        }
+        if (nums[i] < nums[i - 1]) {
+            down[i] = up[i - 1] + 1;
+        }
+        res = max(res, max(up[i], down[i]);
     }
-    
-    for (int i = 1; i < nums.size(); i++) {
-        if (nums[i] < nums[i-1]) {
-            if (down[i-1].second <= 0)
-                down[i].first = 1 + down[i-1].first;
-            else
-                down[i].first = down[i-1].first;
-            down[i].second = -1 * (nums[i] - nums[i-1]);
-        } else if (nums[i] > nums[i-1]) {
-            if (down[i-1].second < 0)
-                down[i].first = down[i-1].first;
-            else
-                down[i].first = 1 + down[i-1].first;
-            down[i].second = -1 * (nums[i] - nums[i-1]);
-        } else
-            down[i] = {1, 0};
-
-        down_max = max(down_max, down[i].first);
-    }
-    return max(up_max, down_max);
+    return res;
 }
 
 int main() {
