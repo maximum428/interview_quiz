@@ -26,6 +26,7 @@ private:
 };
 
 class PlayingState : public MusicPlayerState {
+public:
     PlayingState() : MusicPlayerState(string("Playing")) {}
     virtual ~PlayingState() {}
     virtual void Pause(MusicPlayer *player) {
