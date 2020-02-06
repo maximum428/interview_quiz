@@ -35,30 +35,36 @@ public:
     };
     
     MyBlog() : m_pBlogData(new BlogData()) {
-        pthread_mutex_init(&m_mutex, NULL);
+        //pthread_mutex_init(&m_mutex, NULL);
     }
     virtual ~MyBlog() {
         delete m_pBlogData;
-        pthread_mutex_destroy(&m_mutex);
+        //pthread_mutex_destroy(&m_mutex);
     }
     virtual void Subscribe(BlogObserver *observer) {
-        pthread_mutex_lock(&m_mutex);
+        std::lock_guard<std::mutex> guard(m_mutex);
+        //pthread_mutex_lock(&m_mutex);
         m_observers.push_back(observer);
-        pthread_mutex_unlock(&m_mutex);
+        //pthread_mutex_unlock(&m_mutex);
     }
     virtual void Unsubscribe(BlogObserver *observer) {
         vector<BlogObserver *>::iterator pos;
-        pthread_mutex_lock(&m_mutex);
+        std::lock_guard<std::mutex> guard(m_mutex);
+        //pthread_mutex_lock(&m_mutex);
         for (pos = m_observers.begin(); pos != m_observers.end(); ++pos) {
             if (*pos == observer) {
                 m_observers.erase(pos);
                 break;
             }
         }
-        pthread_mutex_unlock(&m_mutex);
+        //pthread_mutex_unlock(&m_mutex);
     }
     
     virtual void Notify() {
+#if 1
+        std::lock_guard<std::mutex> guard(m_mutex);
+        for_each(m_observers.begin(), m_observers.end(), mem_fn(&BlogObserver::BlogUpdate));
+#else
         vector<BlogObserver *>::iterator pos;
         pthread_mutex_lock(&m_mutex);
         for (pos = m_observers.begin(); pos != m_observers.end(); pos++) {
@@ -66,6 +72,7 @@ public:
             observer->BlogUpdate();
         }
         pthread_mutex_unlock(&m_mutex);
+#endif
     }
     
     BlogData *GetData() { return m_pBlogData; }
@@ -78,7 +85,8 @@ public:
 private:
     vector<BlogObserver*> m_observers;
     BlogData *m_pBlogData;
-    pthread_mutex_t m_mutex;
+    //pthread_mutex_t m_mutex;
+    std::mutex m_mutex;
 };
 
 class Boss : public BlogObserver {
