@@ -49,6 +49,34 @@ string addBinary(string a, string b) {
     return res;
 }
 
+bool makeEqualLength2(string& a, string& b) {
+    int a_pos = a.find('.'), b_pos = b.find('.');
+    if (a_pos == string::npos || b_pos == string::npos) return false;
+    int alen = a.length() - a_pos, blen = b.length() - b_pos;
+
+    if (alen > blen) {
+        for (int i = 0; i < alen - blen; i++) {
+            b = b + '0';
+        }
+    } else if (blen > alen) {
+        for (int i = 0; i < blen - alen; i++) {
+            a = a + '0';
+        }
+    }
+    
+    if (a_pos > b_pos) {
+        for (int i = 0; i < a_pos - b_pos; i++) {
+            b = '0' + b;
+        }
+    } else {
+        for (int i = 0; i < b_pos - a_pos; i++) {
+            a = '0' + a;
+        }
+    }
+    
+    return true;
+}
+
 int add_two_binary(int x, int y){
     int carry = 0, res = 0;
     for (int i = 0; i < 32; i++, x >>= 1, y >>= 1) {
@@ -61,10 +89,34 @@ int add_two_binary(int x, int y){
     return carry ? res |= 1 << 32 : res;
 }
 
+string addFloat(string a, string b) {
+    string res = "";
+    if (a.size() == 0) return b;
+    if (b.size() == 0) return a;
+    
+    if (!makeEqualLength2(a, b)) return res;
+
+    int sum = 0;
+    for (int i = a.length() - 1; i >= 0; i--) {
+        if (a[i] == '.') {
+            res = '.' + res;
+            continue;
+        }
+        sum += (a[i] - '0') + (b[i] - '0');
+        res = (char)(sum % 10 + '0') + res;
+        sum /= 10;
+    }
+
+    return sum != 0 ? '1' + res : res;
+}
+
 int main() {
     string str1 = "1100011", str2 = "10";
     cout << "Sum is " << add_Two_Binary(str1, str2);
     
     int x = 5, y = 3;
     cout << "Sum is " << bitset<32>(add_two_binary(x, y)) << endl;
+    
+    str1 = "2.32"; str2 = "14.7";
+    cout << "Sum is " << addFloat(str1, str2) << endl;
 }
