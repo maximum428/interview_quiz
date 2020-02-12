@@ -122,6 +122,30 @@ int MinimumHeight2(TreeNode *root) {
     return -1;
 }
 
+int widthOfBinaryTree(TreeNode* root) {
+    if (root == NULL) return 0;
+    int res = 0;
+    queue<pair<TreeNode*, int>> q;
+    q.push({root, 1});
+    
+    while (!q.empty()) {
+        if (q.size() == 1)
+            q.front().second = 1;
+        int left = q.front().second, right = left, size = q.size();
+        for (int i = 0; i < size; i++) {
+            auto node = q.front().first;
+            right = q.front().second;
+            q.pop();
+            if (node->left != NULL)
+                q.push({node->left, right * 2});
+            if (node->right != NULL)
+                q.push({node->right, right * 2 + 1});
+        }
+        res = max(res, right - left + 1);
+    }
+    return res;
+}
+
 void PreOrderByRecursion(TreeNode* root) {
     if (root == NULL) return;
     
@@ -330,8 +354,10 @@ int main() {
     cout << "Maximum Depth: " << MaximumHeight2(root) << endl;
     cout << "---------------------------\n";
     cout << "Minimum Depth: " << MinimumHeight2(root) << endl;
-    
-    cout << "Preorder By Recursion:\n";
+    cout << "---------------------------\n";
+    cout << "Width of Binary Tree: " << widthOfBinaryTree(root) << endl;
+    cout << "---------------------------\n";
+    cout << "\nPreorder By Recursion:\n";
     PreOrderByRecursion(root);
     cout << "\nPreorder by Iteration:\n";
     PreOrderByIteration(root);
