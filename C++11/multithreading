@@ -1,0 +1,382 @@
+#include <iostream>
+#include <thread>
+#include <algorithm>
+
+class thread_obj {
+public:
+    void operator()() {
+        std::cout << "Worker Thread " << std::this_thread::get_id() << " is Executing" << std::endl;
+    }
+};
+
+void thread_func() {
+    std::cout << "Thread function " << std::this_thread::get_id() << " is Executing" << std::endl;
+}
+int main() {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < 10; i++)
+        // threads.push_back(std::thread(thread_func));   // thread_obj()));
+        threads.push_back(std::thread([]{
+            std::cout << "Lambda Thread " << std::this_thread::get_id() << " is Executing" << std::endl;
+        }));
+    
+    std::cout << "wait for all the worker thread to finish" << std::endl;
+    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
+    std::cout << "Exiting from Main Thread" << std::endl;
+    return 0;
+}
+/*********************************************************************************************/
+#include <iostream>
+#include <thread>
+
+void thread_func() {
+    std::cout << "Inside Thread :: ID = " << std::this_thread::get_id() << std::endl;
+}
+
+class thread_obj {
+public:
+    void operator()() {
+        std::cout << "Inside Thread Object :: ID = " << std::this_thread::get_id() << std::endl;
+    }
+};
+
+int main() {
+    std::thread threadObj_1(thread_func);
+    std::thread threadObj_2((thread_obj()));  //thread_func);
+    std::thread threadObj_3([]{
+        std::cout << "Inside Thread Lambda :: ID = " << std::this_thread::get_id() << std::endl;
+    });
+    
+    if (threadObj_1.get_id() != threadObj_2.get_id())
+        std::cout << "Both Threads have different IDs" << std::endl;
+    
+    std::cout << "From Main Thread :: ID of Thread 1 = " << threadObj_1.get_id() << std::endl;
+    std::cout << "From Main Thread :: ID of Thread 2 = " << threadObj_2.get_id() << std::endl;
+    std::cout << "From Main Thread :: ID of Thread 3 = " << threadObj_3.get_id() << std::endl;
+    threadObj_1.join();
+    threadObj_2.join();
+    threadObj_3.join();
+    return 0;
+}
+/*****************************************************************************************************/
+#include <iostream>
+#include <string>
+#include <thread>
+
+void thread_func(int x, std::string str) {
+    std::cout << "Passed Number = " << x << std::endl;
+    std::cout << "Passed String = " << str << std::endl;
+}
+
+class thread_obj {
+public:
+    void operator()(int x, std::string str) {
+        std::cout << "Passed Number : " << x << std::endl;
+        std::cout << "Passed String : " << str << std::endl;
+    }
+};
+
+int main() {
+    int x = 10;
+    std::string str = "Sample String";
+    std::thread threadObj_1(thread_func, x, str);
+    std::thread threadObj_2((thread_obj()), x, str);
+    std::thread threadObj_3([x, str]{
+        std::cout << "Passed Number > " << x << std::endl;
+        std::cout << "Passed String > " << str << std::endl;
+    });
+    threadObj_1.join();
+    threadObj_2.join();
+    threadObj_3.join();
+    return 0;
+}
+/*****************************************************************************************************
+#include <iostream>
+#include <thread>
+
+void thread_func(int const & x) {
+    int & y = const_cast<int &>(x);
+    y++;
+    std::cout << "Inside Thread x = " << x << std::endl;
+}
+
+class thread_obj {
+public:
+    void operator()(int const & x) {
+        int & y = const_cast<int &>(x);
+        y++;
+        std::cout << "Inside Thread x : " << x << std::endl;
+    }
+};
+
+int main() {
+    int x = 9;
+    std::cout << "In Main Thread : Before Thread Start x = " << x << std::endl;
+    std::thread threadObj_1(thread_func, std::ref(x));
+    std::thread threadObj_2((thread_obj()), std::ref(x));
+    std::thread threadObj_3([&x]{
+        std::cout << "Inside Thread x > " << x << std::endl;
+    });
+    threadObj_1.join();
+    threadObj_2.join();
+    threadObj_3.join();
+    std::cout << "In Main Thread : After Thread Join x = " << x << std::endl;
+    return 0;
+}
+/*********************************************************************************************************/
+#include <iostream>
+#include <thread>
+
+class DummyClass {
+public:
+    DummyClass() {}
+    DummyClass(const DummyClass & obj) {}
+    void sampleMemberFunction(int x) {
+        std::cout << "Inside sampleMemberFunction " << x << std::endl;
+    }
+};
+
+int main() {
+    DummyClass dummyObj;
+    int x = 10;
+    std::thread threadObj_1(&DummyClass::sampleMemberFunction, &dummyObj, x);
+    threadObj_1.join();
+    return 0;
+}
+/*************************************************************************************************************/
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <mutex>
+
+class Wallet {
+    int m_money;
+    std::mutex m_mutex;
+public:
+    Wallet() : m_money(0) {}
+    int getMoney() { return m_money; }
+#if 1
+    void addMoney(int money) {
+        std::lock_guard<std::mutex> guard(m_mutex);
+        for (int i = 0; i < money; i++)
+            m_money++;
+    }
+#else
+    void addMoney(int money) {
+        m_mutex.lock();
+        for (int i = 0; i < money; i++)
+            m_money++;
+        m_mutex.unlock();
+    }
+#endif
+};
+
+int testMultithreadedWallet() {
+    Wallet walletObject;
+    std::vector<std::thread> threads;
+    
+    for (int i = 0; i < 5; i++) {
+        threads.push_back(std::thread(&Wallet::addMoney, &walletObject, 1000));
+    }
+    for (int i = 0; i < threads.size(); i++)
+        threads[i].join();
+    return walletObject.getMoney();
+}
+
+int main() {
+    int val = 0;
+    for (int k = 0; k < 1000; k++) {
+        if ((val = testMultithreadedWallet()) != 5000)
+            std::cout << "Error at count = " << k << " Money in Wallet = " << val << std::endl;
+    }
+    return 0;
+}
+/**********************************************************************************************************/
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+class Application {
+    std::mutex m_mutex;
+    bool m_DataLoaded;
+public:
+    Application() { m_DataLoaded = false; }
+    
+    void loadData() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::cout << "Loading Data from XML" << std::endl;
+        std::lock_guard<std::mutex> guard(m_mutex);
+        m_DataLoaded = true;
+    }
+
+    void mainTask() {
+        std::cout << "Do Some Handshaking" << std::endl;
+        m_mutex.lock();
+        
+        while (m_DataLoaded != true) {
+            m_mutex.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            m_mutex.lock();
+        }
+        m_mutex.unlock();
+        std::cout << "Do Processing On loaded Data" << std::endl;
+    }
+};
+
+int main() {
+    Application app;
+    
+    std::thread threadObj_1(&Application::mainTask, &app);
+    std::thread threadObj_2(&Application::loadData, &app);
+    
+    threadObj_1.join();
+    threadObj_2.join();
+    return 0;
+}
+/******************************************************************************************/
+#include <iostream>
+#include <thread>
+#include <functional>
+#include <mutex>
+#include <condition_variable>
+
+using namespace std::placeholders;
+
+class Application {
+    std::mutex m_mutex;
+    std::condition_variable m_condVar;
+    bool m_DataLoaded;
+public:
+    Application() { m_DataLoaded = false; }
+
+    void loadData() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::cout << "Loading Data from XML" << std::endl;
+        std::lock_guard<std::mutex> guard(m_mutex);
+        m_DataLoaded = true;
+        m_condVar.notify_one();
+    }
+
+    bool isDataLoaded() {
+        return m_DataLoaded;
+    }
+
+    void mainTask() {
+        std::cout << "Do Some Handshaking" << std::endl;
+        std::unique_lock<std::mutex> mlock(m_mutex);
+        m_condVar.wait(mlock, std::bind(&Application::isDataLoaded, this));
+        std::cout << "Do Processing On loaded Data" << std::endl;
+    }
+};
+
+int main() {
+    Application app;
+    std::thread threadObj_1(&Application::mainTask, &app);
+    std::thread threadObj_2(&Application::loadData, &app);
+    
+    threadObj_1.join();
+    threadObj_2.join();
+    return 0;
+}
+/*************************************************************************************/
+#include <iostream>
+#include <thread>
+#include <future>
+
+void initializer(std::promise<int> *promiseObj) {
+    std::cout << "Inside Thread" << std::endl;
+    promiseObj->set_value(5);
+}
+
+int main() {
+    std::promise<int> promiseObj;
+    std::future<int> futureObj = promiseObj.get_future();
+    std::thread threadObj(initializer, &promiseObj);
+    std::cout << futureObj.get() << std::endl;
+    threadObj.join();
+    return 0;
+}
+/*************************************************************************************/
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <thread>
+
+using namespace std::chrono;
+
+std::string fetchDataFromDB(std::string recvdData) {
+    std::this_thread::sleep_for(seconds(1));
+    return "DB_" + recvdData;
+}
+
+std::string fetchDataFromFile(std::string recvdData) {
+    std::this_thread::sleep_for(seconds(1));
+    return "File_" + recvdData;
+}
+
+int main() {
+    system_clock::time_point start = system_clock::now();
+    
+    std::string dbData = fetchDataFromDB("Data");
+    std::string fileData = fetchDataFromFile("Data");
+    
+    auto end = system_clock::now();
+    auto diff = duration_cast<std::chrono::seconds> (end - start).count();
+    std::cout << "Total Time Taken = " << diff << " Seconds" << std::endl;
+    std::string data = dbData + " :: " + fileData;
+    
+    std::cout << "Data = " << data << std::endl;
+    return 0;
+}
+/*************************************************************************************/
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <thread>
+#include <future>
+
+using namespace std::chrono;
+
+std::string fetchDataFromDB(std::string recvdData) {
+    std::this_thread::sleep_for(seconds(1));
+    return "DB_" + recvdData;
+}
+
+std::string fetchDataFromFile(std::string recvdData) {
+    std::this_thread::sleep_for(seconds(1));
+    return "File_" + recvdData;
+}
+
+struct DataFetcher {
+    std::string operator()(std::string recvdData) {
+        std::this_thread::sleep_for(seconds(1));
+        return "DB_" + recvdData;
+    }
+};
+
+int main() {
+    system_clock::time_point start = system_clock::now();
+    
+    //std::future<std::string> resultFromDB = std::async(std::launch::async, fetchDataFromDB, "Data");
+    //std::future<std::string> resultFromDB = std::async(std::launch::async, DataFetcher(), "Data");
+    std::future<std::string> resultFromDB = std::async([](std::string recvdData) {
+        std::this_thread::sleep_for(seconds(1));
+        return "DB_" + recvdData;
+    }, "Data");
+    
+    std::string fileData = fetchDataFromFile("Data");
+    
+    std::string dbData = resultFromDB.get();
+    
+    auto end = system_clock::now();
+    
+    auto diff = duration_cast<std::chrono::seconds> (end - start).count();
+    
+    std::cout << "Total Time Taken = " << diff << " Seconds" << std::endl;
+    
+    std::string data = dbData + " :: " + fileData;
+    
+    std::cout << "Data = " << data << std::endl;
+    
+    return 0;
+}
