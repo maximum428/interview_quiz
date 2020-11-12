@@ -48,15 +48,12 @@ public:
             return "BOW!! You hit.";
         
         int sum = 0;
-        vector<vector<int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        vector<vector<int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
         for (auto dir : dirs) {
             int _x = x + dir[0];
             int _y = y + dir[1];
-            if (_x < 0 || _x == m_rows)
-                _x = x;
-            if (_y < 0 || _y == m_columns)
-                _y = y;
-            sum += board[_x][_y];
+            if (_x >= 0 && _x < m_rows && _y >= 0 && _y < m_columns)
+                sum += board[_x][_y];
         }
         return "There are " + to_string(sum) + " mines arount the point";
     }
