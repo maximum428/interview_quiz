@@ -1,78 +1,74 @@
-#include <iostream>
+#include <random>
 
 class MineGame {
+    int m_rows, m_columns;
+    int m_mines;
+    vector<vector<int>> board;
 public:
-    MineGame(int rows, int columns, int mines) : _rows(rows), _columns(columns), _mines(mines) {
+    MineGame(int rows, int columns, int mines) : m_rows(rows), m_columns(columns), m_mines(mines) {
+        board = vector<vector<int>>(rows, vector<int>(columns, 0));
+#if 1
+        random_device rd;
+        mt19937 mt(rd());
+        while (m_mines--) {
+            uniform_real_distribution<double> x(0, m_rows-1);
+            uniform_real_distribution<double> y(0, m_columns-1);
+            if (board[int(x(mt))][int(y(mt))]) {
+                m_mines++;
+                continue;
+            }
+            board[int(x(mt))][int(y(mt))] = 1;
+        }
+#else
         srand(time(0));
-        board = vector<vector<unsigned int>>(rows, vector<unsigned int>(columns, 0));
-        /*
-        for (int i = 0; i < _rows; i++) {
-            vector<unsigned int> myrow;
-            for (int j = 0; j < _columns; j++) {
-                myrow.push_back(0);
-            }
-            board.push_back(myrow);
-        }*/
-        
-        while (_mines--) {
-            int x = rand() % _rows;
-            int y = rand() % _columns;
-            board[x][y] = 1;
+        while (m_mines--) {
+            int x = rand() % m_rows;
+            int y = rand() % m_columns;
+            if (board[x][y])
+                m_mines++;
+            else
+                board[x][y] = 1;
         }
+#endif
     }
-    
     void Display() {
-        for (int i = 0; i < _rows; i++) {
-            for (int j = 0; j < _columns; j++) {
-                std::cout << board[i][j] << "\t";
+        for (auto row : board) {
+            string line = "";
+            for (auto element : row) {
+                line += to_string(element) + ", ";
             }
-            std::cout << "\n";
+            cout << line.substr(0, line.length()-2) << '\n';
         }
+        cout << '\n';
     }
-    
     string Play(int x, int y) {
-        int numOfMines = 0;
-        if (x > _rows || y > _columns) throw std::invalid_argument("ERROR:Incorrect input");
+        if (x < 0 || x >= m_rows || y < 0 || y >= m_columns)
+            return "Incorrect input";
+        if (board[x][y])
+            return "BOW!! You hit.";
         
-        if (board[x][y] == 1) {
-            return "Bow!!";
+        int sum = 0;
+        vector<vector<int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for (auto dir : dirs) {
+            int _x = x + dir[0];
+            int _y = y + dir[1];
+            if (_x < 0 || _x == m_rows)
+                _x = x;
+            if (_y < 0 || _y == m_columns)
+                _y = y;
+            sum += board[_x][_y];
         }
-        
-        if (x > 0 && y > 0)
-            numOfMines += board[x - 1][ y - 1];
-        if (x > 0 && y < _columns)
-            numOfMines += board[x - 1][y + 1];
-        if (x < _rows && y > 0)
-            numOfMines += board[x + 1][y - 1];
-        if (x < _rows && y < _columns)
-            numOfMines += board[x + 1][y + 1];
-        if (x > 0)
-            numOfMines += board[x - 1][y];
-        if (x < _rows)
-            numOfMines += board[x + 1][y];
-        if (y > 0)
-            numOfMines += board[x][y - 1];
-        if (y < _columns)
-            numOfMines += board[x][y + 1];
-        return "There are " + std::to_string(numOfMines) + " mines around the point (" + std::to_string(x) + ", " + std::to_string(y) + ")";
+        return "There are " + to_string(sum) + " mines arount the point";
     }
-    
-private:
-    int _rows, _columns;
-    int _mines;
-    vector< vector<unsigned int> > board;
 };
+
 int main() {
-    MineGame game1(10, 5, 5);
-    MineGame game2(4, 3, 2);
-    MineGame game3(12, 12, 10);
-    MineGame game4(9, 6, 8);
-    MineGame game5(9, 10, 10);
-    game1.Display();
-    game2.Display();
-    game3.Display();
-    game4.Display();
-    game5.Display();
+    MineGame game1(10, 5, 8);
     
-    std::cout << game1.Play(3, 5) << std::endl;
+    game1.Display();
+    
+    cout << game1.Play(3, 4) << endl;
+
+    
+    return 0;
 }
