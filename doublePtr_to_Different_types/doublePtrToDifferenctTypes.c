@@ -30,7 +30,7 @@ void demo() {
     floa b = 3.2;
     void *float_ptr = &b;
     v_ptr = float_ptr;
-    vv_ptr = *v_ptr;
+    vv_ptr = &v_ptr;
     
     cout << *(float*)float_ptr << endl;
     cout << *(float*)v_ptr << endl;
