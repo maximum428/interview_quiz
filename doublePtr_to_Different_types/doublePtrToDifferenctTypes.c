@@ -12,6 +12,22 @@ void doublePtrToDifferentTypes() {
     printf("%.2f\n", *(float*)*v_ptr);
 }
 
+void demo() {
+    int a = 12;
+    void* int_ptr = &a;
+    a = 13;
+    void *v_ptr = int_ptr;
+    *(int*)v_ptr = 14;
+    void **vv_ptr = &int_ptr;
+    *(int*)*vv_ptr = 15;
+    void ***vvv_ptr = *vv_ptr;
+    *(int*)**vvv_ptr = 16;
+    
+    cout << *(int*)v_ptr << endl;
+    cout << *(int*)*vv_ptr << endl;
+    cout << *(int*)**vvv_ptr << endl;
+}
+
 int main(void) {
     doublePtrToDifferentTypes();
     return 0;
