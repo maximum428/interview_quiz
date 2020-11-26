@@ -26,6 +26,16 @@ void demo() {
     cout << *(int*)v_ptr << endl;
     cout << *(int*)*vv_ptr << endl;
     cout << *(int*)**vvv_ptr << endl;
+    
+    floa b = 3.2;
+    void *float_ptr = &b;
+    v_ptr = float_ptr;
+    vv_ptr = *v_ptr;
+    
+    cout << *(float*)float_ptr << endl;
+    cout << *(float*)v_ptr << endl;
+    cout << *(float*)*vv_ptr << endl;
+    cout << *(float*)**vvv_ptr << endl;
 }
 
 int main(void) {
