@@ -5,6 +5,27 @@ Quick notes:
 the number of times we can express that number in a power of two. For all binary numbers containing only the rightmost set bit as 1 like 2, 4, 8, 16, 32…. 
 Find that position of rightmost set bit is always equal to log2(Number) + 1.
 
+Setting a bit:
+Set k-th bit by using bitwise OR operator ( | )
+(1 << k) | num
+
+Clearing a bit:
+Use the bitwise AND operator (&) to set the nth bit of number to 0
+~(1 << k) & num
+
+Toggling a bit:
+Use the bitwise XOR operator (^) to toggle the nth bit of number
+(1 << k) ^ num
+
+Checking a bit:
+To check a bit, shift number n to the right, then bitwise AND it
+(num >> k) & 1
+
+Changing the nth bit to x:
+~(1 << k) & num | (x << k)
+
+
+number & ~((Uint)1 << n)
 
 Position of rightmost set bit:
 Write a function to return the position of the first 1 from right to left, in the binary representation of an integer.
