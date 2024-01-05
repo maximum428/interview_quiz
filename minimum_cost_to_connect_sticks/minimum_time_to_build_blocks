@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int minbuildTime(vector<int>& blocks, int split) {
+    priority_queue<int, vector<int>, greater<int>> q;
+    for (int block : blocks) {
+        q.push(block);
+    }
+    while (q.size() >= 2) {
+        q.pop();
+        int sum = q.top();
+        q.pop();
+        q.push(sum + split);
+    }
+    return q.top();
+}
+
+int main() {
+    vector<int> v{1,2};
+    cout << minbuildTime(v, 5) << endl;
+    return 0;
+}
