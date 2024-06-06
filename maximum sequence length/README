@@ -1,0 +1,18 @@
+Consider an array of n ticket prices, tickets.
+      A number, m, is defined as the size of some subsequence, s, of tickets where each element covers an unbroken range of integers.
+      
+      That is to say, if you were to sort the elements in s,
+        the absolute difference between any elements j and j + 1 would be either 0 or 1.
+      
+      For example, tickets = [8, 5, 4, 8, 4] gives us sorted subsequences {4, 4, 5} and {8, 8};
+         these subsequences have m values of 3 and 2, respectively.
+
+     Complete the function MaxSequence below. 
+        The function must return an integer that denotes the maximum possible value of m.
+
+        MaxSequence has the following parameter(s):
+            tickets[tickets[0],...tickets[n-1]]:  an array of integers
+
+        Constraints
+        1 ≤ n ≤ 1000000
+        1 ≤ tickets[i] ≤ 100000000
