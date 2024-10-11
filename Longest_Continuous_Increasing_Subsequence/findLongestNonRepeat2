@@ -1,0 +1,48 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+int findLongestNonRepeat(std::vector<std::string> &names) {
+    if (names.size() < 2) return names.size();
+    
+    int i, res = 1, start = 0;
+    std::vector vec = {names[0]};
+    for (i = 1; i < names.size(); i++) {
+        if (std::find(vec.begin(), vec.end(), names[i]) == vec.end()) {
+            vec.push_back(names[i]);
+            res = std::max(res, i - start + 1);
+        } else {
+            start = i;
+            vec = {names[i]};
+        }
+    }
+    return std::max(res, i - start + 1);
+}
+
+int findLongestNonRepeat2(std::string *names, int length) {
+    if (length < 2) return length;
+    
+    int i, res = 1, start = 0;
+    std::vector vec = {names[0]};
+    for (i = 1; i < length; i++) {
+        if (std::find(vec.begin(), vec.end(), *(names+i)) == vec.end()) {
+            vec.emplace_back(*(names+i));
+            res = std::max(res, i - start + 1);
+        } else {
+            start = i;
+            vec = {*(names+i)};
+        }
+    }
+    return std::max(res, i - start + 1);
+}
+
+int main(int argc, char** argv) {
+#if 0
+    std::vector<std::string> names = {"Alison", "Alina", "Alex", "Aileen", "Alex"};
+    std::cout << findLongestNonRepeat(names) << std::endl;
+#else
+    std::string names[] = {"Alison", "Alina", "Alex", "Aileen", "Alex"};
+    std::cout << findLongestNonRepeat2(names, sizeof(names)/sizeof(names[0])) << std::endl;
+#endif
+    return 0;
+}
