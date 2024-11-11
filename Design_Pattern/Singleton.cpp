@@ -16,8 +16,8 @@ public:
     }
 private:
     MySingleton() = default;
-    ~MySingleton() = default;
-    MySingleton(const MySingleton &) = delete;
+    //~MySingleton() = default;
+    //MySingleton(const MySingleton &) = delete;
     MySingleton& operator=(const MySingleton &) = delete;
 
     static MySingleton *instance;
