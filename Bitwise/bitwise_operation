@@ -18,7 +18,7 @@ num ^= (-x ^ num) & (1 << n);
 // Extract last bit
 bit = num & -num;
 or
-bit = num & !(num - 1)
+bit = num & ~(num - 1)
 
 // Remove last bit
 num & (num - 1)
