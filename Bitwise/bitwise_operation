@@ -1,0 +1,32 @@
+// O(1) < O(log(n)) < O(n) < O(nlog(n)) < O(n^2) < O(n^3) < O(b^n), b > 1 < O(n!)
+
+// Set bit
+num |= 1UL << pos;
+
+// Clear bit
+num &= ~(1UL << pos);
+
+// Toggle bit
+num ^= 1UL << pos;
+
+// Check bit
+bit = (num >> pos) & 1UL;
+
+// Change nth bit to x:
+num ^= (-x ^ num) & (1 << n);
+
+#define MAX(x, y) x ^ ((x^y) & -(x < y))
+#define MIN(x, y) y ^ ((x^y) & -(x < y))
+
+// Find posiiton of rightmost set(1) bit:
+int pos = log2(n & -n);
+
+5:   0000 0101
+~5:  1111 1010
+5-1: 0000 0100
+-5:  1111 1011
+
+4:   0000 0100
+~4:  1111 1011
+4-1: 0000 0011
+-4:  1111 1100
