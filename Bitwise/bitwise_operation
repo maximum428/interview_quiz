@@ -20,6 +20,8 @@ bit = num & -num;
 or
 bit = num & ~(num - 1)
 
+//Note:   -num is equal to ~(num - 1)
+
 // Remove last bit
 num & (num - 1)
 
