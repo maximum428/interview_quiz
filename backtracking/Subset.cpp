@@ -15,6 +15,29 @@
         backtrack(nums, res, vec, 0);
         return res;
     }
+#elif 2
+    vector<int> backtrack(vector<int>& nums, int start) {
+        vector<int> vec_sub;
+        int index = 0;
+        for (int i = start; i > 0; i >>= 1) {
+            if ((i & 1)) {
+                vec_sub.push_back(nums[index]);
+            }
+            index++;
+        }
+        return vec_sub;
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        int max = 1UL << nums.size();
+
+        for (int i = 0; i < max; i++) {
+            vector<int> vec = backtrack(nums, i);
+            res.push_back(vec);
+        }
+        return res;
+    }
 #else
     vector<vector<int>> subsets(vector<int>& nums) {
         vector<vector<int>> res = {{}};
