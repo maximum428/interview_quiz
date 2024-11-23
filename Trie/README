@@ -4,10 +4,13 @@ N, M <= 10000
 字串都是小寫英文
 
 範例輸入:
-3 3
+3(cards) 3(ask)
+cards:
 sprout
 sprout
 akindofplant
+
+ask:
 sprout
 is
 akindofplant
