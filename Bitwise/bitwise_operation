@@ -15,6 +15,12 @@ bit = (num >> pos) & 1UL;
 // Change nth bit to x:
 num ^= (-x ^ num) & (1 << n);
 
+// Swap bits
+int bit1 = (num >> pos1) & 1UL;
+int bit2 = (num >> pos2) & 1UL;
+int x = (bit1 ^ bit2);
+num ^= ((x << pos1) | (x << pos2))
+
 // Extract last bit
 bit = num & -num;
 or
