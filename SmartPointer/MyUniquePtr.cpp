@@ -26,5 +26,9 @@ private:
 
 int main() {
     MyUniquePtr<int> myptr(new int(10));
-    
+    MyUniquePtr<int> myptr2 = myptr;
+    MyUniquePtr<int> myptr3(myptr2);
+    MyUniquePtr<int> myptr4 = MyUniquePtr<int>(new int(5));
+
+    return 0;
 }
