@@ -10,11 +10,11 @@ public:
     }
     MyUniquePtr(const MyUniquePtr<T> &p) {
         ptr = p.ptr;
-        p->ptr = nullptr;
+        p.ptr = nullptr;
     }
     MyUniquePtr& operator=(const MyUniquePtr<T> &p) {
-        if (this == p) return *this;
-        ptr = p->ptr;
+        if (this == &p) return *this;
+        ptr = p.ptr;
         return *this;
     }
     ~MyUniquePtr() {
