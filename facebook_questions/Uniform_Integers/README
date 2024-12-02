@@ -1,0 +1,17 @@
+A positive integer is considered uniform if all of its digits are equal. 
+For example, 222 is uniform, while 223 is not.
+Give two positive integers A and B, determine the number of uniform integers between A and B, inclusive.
+Please take care to write a solution which runs within the time limit.
+
+Example:
+A = 75, B = 300
+Expected Return Value = 5.
+The uniform integers between 75 and 300 are 77, 88, 99, 111, and 222.
+
+A = 1, B = 9
+Expected Return Value = 9.
+All 9 single-digit integers between 1 and 9 (inclusive) are uniform.
+
+A = 999999999999, B = 999999999999.
+Expected Return Value = 1.
+The single integer under consideration (999,999,999,999) is uniform.
