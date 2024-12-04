@@ -68,6 +68,22 @@ int findLongestNonRepeat(vector<string>& names) {
     return ans;
 }
 
+// Best solution for non-repeast 
+int findLongestNonRepeat(vector<string> names) {
+    unordered_map<string, int> mp;
+    int maxlen = 0, left = 0;
+    for (int i = 0; i < names.size(); i++) {
+        if (mp.find(names[i]) == mp.end() || mp[names[i]] < left) {
+            maxlen = max(maxlen, i - left + 1);
+        } else {
+            left = mp[names[i]] + 1;
+        }
+        mp[names[i]] = i;
+    }
+    return maxlen;
+}
+
+
 int findLengthOfLCIS(vector<int>& nums) {
     int ans = 0, start = 0;
     for (auto i = 1; i < nums.size(); i++) {
