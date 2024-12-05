@@ -19,6 +19,30 @@ int longestCommonSubsequence(string text1, string text2) {
 }
 
 /*******************************************************************/
+/*** Longest Palindromic Substring ***/
+/* "babad" */
+/* Result: "bab" */
+string longestPalindrome(string s) {
+   if (s.length() < 2) return s;
+   int start = 0, len = ;
+   for (int i = 0; i < s.length() - 1; i++) {
+      helper(s, i, i, start, len);
+      helper(s, i, i+1, start, len);
+   }
+   s.substr(start, len);
+}
+void helper(string& s, int left, int right, int& start, int& len) {
+   while (left >= 0 && right < s.length() && s[left] == s[right]) {
+      left--; right++;
+   }
+
+   if (len < right - left - 1) {
+      len = right - left - 1;
+      start = left + 1;
+   }
+}
+
+/*******************************************************************/
 /*** Longest Valid Parentheses ***/
 /* ")()())" */
 /* Result: 4,   "()()"  */
