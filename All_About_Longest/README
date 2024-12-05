@@ -17,3 +17,25 @@ int longestCommonSubsequence(string text1, string text2) {
    }
    return dp[text1.length()][text2.length()];
 }
+
+/*** Longest Valid Parentheses ***/
+/* ")()())" */
+/* Result: 4,   "()()"  */
+int longestValidParentests(string s) {
+   int maxlen = 0;
+   stack<int> st;
+   st.push(-1);
+   for (int i = 0; i < s.length(); i++) {
+      if (s[i] == '(') {
+         st.push(i);
+      } else {
+         st.pop();
+         if (!st.empty()) {
+            maxlen = max(maxlen, i - st.top());
+         } else {
+            st.push(i);
+         }
+      }
+   }
+   return maxlen;
+}
