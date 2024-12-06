@@ -220,3 +220,12 @@ int longestAscendingSubsequence(vector<int> nums) {
     }
     return result;
 }
+
+/*******************************************************************/
+/*** 395. Longest Substring with At Least Repeating Characters ***/
+
+/*******************************************************************/
+/*** Longest Substring with At Most Distinct Characters ***/
+
+/*******************************************************************/
+/*** 424. Longest Repeating Character Replacement ***/
