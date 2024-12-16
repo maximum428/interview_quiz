@@ -150,7 +150,7 @@ int longestConsecutiveSeq(vector<int> nums) {
 /* Result: 4,  [2, 3, 7, 101] */
 /* Note:  This is O(n^2) solution,  O(nlog(n)) solution is below */
 int lengthOfLIS(vector<int>& nums) {
-   if (nums.size() == ) return 0;
+   if (nums.size() == 0) return 0;
    vector<int> dp(nums.size(), 1);
    int res = 1;
    for (int i = 1; i < nums.size(); i++) {
