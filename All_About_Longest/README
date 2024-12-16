@@ -132,7 +132,7 @@ int longestConsecutiveSeq(vector<int> nums) {
    }
    int res = 0;
    for (const auto& num : nums) {
-      if (st.find(num - 1) == st.end() {
+      if (st.find(num - 1) == st.end()) {
          int currNum = num, len = 1;
          while (st.find(currNum+1) != st.end()) {
             currNum++;
@@ -162,23 +162,6 @@ int lengthOfLIS(vector<int>& nums) {
      res = max(res, dp[i]);
    }
    return res;
-}
-
-/*******************************************************************/
-/*** Longest Continuous Increasing Subsequence ***/
-/* [1, 3, 5, 4, 7] */
-/* Result: 3   ([1, 3, 5]) */
-int findLengthOfLCIS(vector<int> nums) {
-   if (nums.size() == 0) return 0;
-
-   int ans = 0, start = 0;
-   for (int i = 0; i < nums.size(); i++) {
-      if (i > 0 && nums[i] <= nums[i-1]) {
-         start = i;
-      }
-      ans = max(ans, i - start + 1);
-   }
-   return ans;
 }
 
 /*******************************************************************/
@@ -219,6 +202,23 @@ int longestAscendingSubsequence(vector<int> nums) {
         }
     }
     return result;
+}
+
+/*******************************************************************/
+/*** Longest Continuous Increasing Subsequence ***/
+/* [1, 3, 5, 4, 7] */
+/* Result: 3   ([1, 3, 5]) */
+int findLengthOfLCIS(vector<int> nums) {
+   if (nums.size() == 0) return 0;
+
+   int ans = 0, start = 0;
+   for (int i = 0; i < nums.size(); i++) {
+      if (i > 0 && nums[i] <= nums[i-1]) {
+         start = i;
+      }
+      ans = max(ans, i - start + 1);
+   }
+   return ans;
 }
 
 /*******************************************************************/
