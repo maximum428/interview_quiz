@@ -380,3 +380,29 @@ int main() {
     
     return 0;
 }
+
+/*************************************************************************************/
+#include <iostream>
+#include <thread>
+#include <functional>
+
+using namespace std;
+
+int add(int a, int b) {
+  return a + b;
+}
+
+int main() {
+  int (*operation)(int, int);
+
+  function<int(int, int)> callbackFunc = add;
+
+  operation = add;
+  cout << "Result of addiont: " << operation(5, 3) << endl;
+
+  cout << callbackFunc(5, 3) << endl;
+  callbackFunc = [](int a, int b) -> int { return a + b; };
+  cout << callbackFunc(6, 4) << endl;
+
+  return 0;
+}
