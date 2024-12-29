@@ -45,7 +45,7 @@ mask = ~(mask << len);    // 0000. 0011.  ex len = 2
 num >>= pos;
 res = num & mask;
 // or
-(((1 << len) - 1) & (n >> (pos - 1)));
+res = (((1 << len) - 1) & (n >> (pos - 1)));
 
 
 #define MAX(x, y) x ^ ((x^y) & -(x < y))
