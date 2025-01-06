@@ -79,3 +79,46 @@ str[i] -= ('Z' - 'z');
 
 // Cover char to integer
 int n = str[i] - '0';
+
+=======================================================================
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int UpperBound(vector<int> nums, int key) {
+    int left = 0, right = nums.size() - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] <= key) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+}
+
+int LowerBound(vector<int> nums, int key) {
+    int left = 0, right = nums.size() - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < key) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left - 1;
+}
+
+int main(int argc, char** argv) {
+    vector<int> nums = {1, 2, 3, 4, 5, 6};
+    
+    cout << "Lower bound: " << nums[LowerBound(nums, 4)] << endl;
+    
+    cout << "Upper bound: " << nums[UpperBound(nums, 4)] << endl;
+    return 0;
+}
+
+
