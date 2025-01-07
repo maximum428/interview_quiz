@@ -23,3 +23,25 @@ vector<vector<int>> threeSum(vector<int> &nums) {
     }
     return res;
 }
+
+// solution #2 by using backtrack algorithm
+void backtrack(vector<int>& nums, vector<vector<int>>& res, vector<int>& vec, int amount, int start) {
+   if (amount == 0 && vec.size() == 3) {
+       res.push_back(vec);
+       return;
+   }
+   for (int i = start; i < (int)nums.size(); i++) {
+      if (i > start && nums[i] == nums[i-1]) continue;
+         vec.push_back(nums[i]);
+         backtrack(nums, res, vec, nums[i]+amount, i+1);
+         vec.pop_back();
+   }
+}
+
+vector<vector<int>> threeSum(vector<int> nums) {
+    vector<vector<int>> res;
+    vector<int> vec;
+    sort(nums.begin(), nums.end());
+    backtrack(nums, res, vec, 0, 0);
+    return 0;
+}
