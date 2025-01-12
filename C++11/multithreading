@@ -115,6 +115,34 @@ int main() {
     threadObj_3.join();
     return 0;
 }
+
+// C version
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+struct ThreadData {
+  int x;
+  const char* str;
+};
+
+void *thread_func(void* arg) {
+  ThreadData* data = (ThreadData*)arg;
+  printf("Passed Number: %d\n", data->x);
+  printf("Passed String: %s\n", data->str);
+  return NULL;
+}
+int main() {
+  ThreadData* data = (ThreadData*)malloc(sizeof(ThreadData));
+  data->x = 10;
+  data->str = "Sample string";
+  
+  pthread_t thread_id;
+  pthread_create(&thread_id, NULL, thread_func, (void*)data);
+
+  pthread_join(thread_id, NULL);
+  return 0;
+}
 /*****************************************************************************************************
 #include <iostream>
 #include <thread>
