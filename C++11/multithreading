@@ -124,19 +124,23 @@ int main() {
 struct ThreadData {
   int x;
   const char* str;
+  char desc[128];
 };
 
 void *thread_func(void* arg) {
   ThreadData* data = (ThreadData*)arg;
   printf("Passed Number: %d\n", data->x);
   printf("Passed String: %s\n", data->str);
+  printf("Passed Desc: %s\n", data->desc);
   return NULL;
 }
 int main() {
   ThreadData* data = (ThreadData*)malloc(sizeof(ThreadData));
   data->x = 10;
   data->str = "Sample string";
-  
+  memset(data->desc, 0, 128);
+  strncpy(data->desc, "Sample string", 127);
+
   pthread_t thread_id;
   pthread_create(&thread_id, NULL, thread_func, (void*)data);
 
