@@ -25,6 +25,31 @@ int main() {
     std::cout << "Exiting from Main Thread" << std::endl;
     return 0;
 }
+
+
+// C version
+#include <pthread.h>
+#include <stdio.h>
+
+#define THREAD_SIZE 10
+
+void *thread_function(void *id) {
+  printf("Inside thread function : thread id = %d\n", (int*)id);
+  return NULL;
+}
+int main(int argc, char** argv) {
+  pthread_t thread_ids[THREAD_SIZE];
+  int i = 0;
+  for (i = 0; i < THREAD_SIZE; i++) {
+    pthread_create(&thread_ids[i], NULL, thread_function, (int*)i);
+  }
+
+  for (i = 0; i < THREAD_SIZE; i++) {
+    pthread_join(thread_ids[i], NULL);
+  }
+  printf("Main thread finished\n");
+  return 0;
+}
 /*********************************************************************************************/
 #include <iostream>
 #include <thread>
