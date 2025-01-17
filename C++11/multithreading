@@ -383,6 +383,22 @@ int main() {
     std::string data = dbData + " :: " + fileData;
     
     std::cout << "Data = " << data << std::endl;
+
+    // Convert to time_t
+    time_t time = chrono::system_clock::to_time_t(end);
+
+    // Convert to tm struct
+    tm* tm = localtime(&time);
+
+    // Format the time using strftime
+    char buffer[80];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+
+    // Create a string from the formatted time
+    string timestamp(buffer);
+
+    cout << timestamp << endl;
+
     return 0;
 }
 /*************************************************************************************/
