@@ -1,183 +1,200 @@
-#include <stdlib.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 struct Node {
   int data;
   struct Node *next;
 };
 
-typedef struct Node2 {
-  int data;
-  struct Node2 *next;
-} Node_t;
-
-void append(struct Node **head, int data) {
+void push(struct Node **head, int data) {
   struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
   new_node->data = data;
   new_node->next = NULL;
+
   if (*head == NULL) {
     *head = new_node;
   } else {
-    struct Node *tmp = *head;
-    while (tmp->next != NULL) {
-      tmp = tmp->next;
+    struct Node *curr = *head;
+    while (curr->next != NULL) {
+      curr = curr->next;
     }
-    tmp->next = new_node;
+    curr->next = new_node;
   }
 }
 
-void insert2(Node_t **head, int data) {
-  Node_t *new_node = (Node_t*)malloc(sizeof(Node_t));
+void push_top(struct Node **head, int data) {
+  struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
+  new_node->data = data;
+  new_node->next = *head;
+
+  *head = new_node;
+}
+
+int insert_by_value(struct Node **head, int data) {
+  struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
   new_node->data = data;
   new_node->next = NULL;
+
   if (*head == NULL) {
+    return -1;
+  } else if ((*head)->data > data) {
+    new_node->next = *head;
     *head = new_node;
-  } else {
-    Node_t *tmp = *head;
-    while (tmp->next != NULL) {
-      tmp = tmp->next;
-    }
-    tmp->next = new_node;
+    return 0;
   }
+  struct Node *curr = *head;
+  while (curr->next != NULL) {
+    if (curr->next->data > data) {
+      new_node->next = curr->next;
+      curr->next = new_node;
+      return 0;
+    }
+    curr = curr->next;
+  }
+  if (curr->data <= data) {
+    curr->next = new_node;
+    return 0;
+  }
+  return -1;
 }
+
+int insert_by_index(struct Node **head, int index, int data) {
+  struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
+  new_node->data = data;
+  new_node->next = NULL;
+
+  if (index < 0) {
+    return -1;
+  } else if (index == 0) {
+    new_node->next = *head;
+    *head = new_node;
+  } else if (*head != NULL) {
+    struct Node *curr = *head;
+    for (int i = 1; i < index; i++) {
+      if (curr == NULL) {
+        return -1;
+      }
+      curr = curr->next;
+    }
+    new_node->next = curr->next;
+    curr->next = new_node;
+  }
+  return 0;
+}
+
+int pop(struct Node **head) {
+  int res = -1;
+  if (*head == NULL) {
+    return res;
+  } else if ((*head)->next == NULL) {
+    res = (*head)->data;
+    *head = NULL;
+    free(*head);
+    return res;
+  }
+  struct Node *tmp = NULL;
+  tmp = (*head)->next;
+  res = tmp->data;
+  free(*head);
+  *head = tmp;
+  return res;
+}
+
+int pop_last(struct Node **head) {
+  int ret = -1;
+  if (*head == NULL) {
+    return ret;
+  } else if ((*head)->next == NULL) {
+    ret = (*head)->data;
+    *head = NULL;
+    free(*head);
+    return ret;
+  }
+
+  struct Node *curr = *head;
+  while (curr->next->next != NULL) {
+    curr = curr->next;
+  }
+  ret = curr->next->data;
+  free(curr->next->next);
+  curr->next = NULL;
+  return ret;
+}
+
+int remove_by_value(struct Node **head, int data) {
+  int ret = -1;
+  if (*head == NULL) {
+    return ret;
+  } else if ((*head)->data == data) {
+    struct Node *del_node = *head;
+    *head = (*head)->next;
+    free(del_node);
+    return 0;
+  }
+  struct Node *curr = *head;
+  while (curr->next != NULL) {
+    if (curr->next->data == data) {
+      struct Node *del_node = curr->next;
+      curr->next = curr->next->next;
+      free(del_node);
+      return 0;
+    }
+    curr = curr->next;
+  }
+  return -1;
+}
+
+int remove_by_index(struct Node **head, int index) {
+  int ret = -1;
+  if (*head == NULL || index < 0) {
+    return ret;
+  } else if (*head != NULL && index == 0) {
+    pop(head);
+  }
+  struct Node *curr = *head, *tmp;
+  for(int i = 0; i < index - 1; i++) {
+    if (curr->next == NULL) {
+      return ret;
+    }
+    curr = curr->next;
+  }
+  tmp = curr->next;
+  ret = curr->data;
+  curr->next = tmp->next;
+  free(tmp);
+  return ret;
+}
+
 void traverse(struct Node *head) {
   if (head == NULL) {
     return;
   }
-  struct Node *cur = head;
-  while (cur != NULL) {
-    printf("%d ", cur->data);
-    cur = cur->next;
+  struct Node *curr = head;
+  while (curr != NULL) {
+    printf("%d ", curr->data);
+    curr = curr->next;
   }
   printf("\n");
 }
-
-void traverse2(Node_t *head) {
-  if (head == NULL) {
-    return;
-  }
-  Node_t *cur = head;
-  while (cur != NULL) {
-    printf("%d ", cur->data);
-    cur = cur->next;
-  }
-  printf("\n");
-}
-
-void insertByValue(struct Node** head, int data) {
-  struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-  new_node->data = data;
-  new_node->next = NULL;
-
-  if (*head == NULL) {
-    return;
-  }
-  struct Node* cur = *head;
-  if (cur->data > data) {
-    new_node->next = cur;
-    *head = new_node;
-    return;
-  }
-  while (cur->next != NULL && cur->next->data < data) {
-    cur = cur->next;
-  }
-  new_node->next = cur->next;
-  cur->next = new_node;
-}
-
-void deleteByValue(struct Node** head, int data) {
-  if (*head == NULL) {
-    return;
-  } else if ((*head)->data == data) {
-    struct Node *del_node = (*head);
-    (*head) = (*head)->next;
-    free(del_node);
-    return;
-  }
-  struct Node *cur = *head;
-  while (cur->next != NULL && cur->next->data != data) {
-    cur = cur->next;
-  }
-  if (cur->next != NULL && cur->next->data == data) {
-    struct Node *del_node = cur->next, *next = cur->next->next;
-    cur->next = next;
-    free(del_node);
-  }
-}
-void deleteByIndex(struct Node **head, int index) {
-  struct Node* cur = *head;
-  if (*head == NULL || index < 0) {
-    return;
-  }
-  if (index == 0) {
-    struct Node *del_node = *head, *cur = *head;
-    *head = cur->next;
-    free(del_node);
-    return;
-  }
-  for (int i = 0; cur->next != NULL && i < index-1; i++) {
-    cur = cur->next;
-  }
-  if (cur->next != NULL) {
-    struct Node *del_node = cur->next;
-    cur->next = cur->next->next;
-    free(del_node);
-  }
-}
-
-void insertByIndex(struct Node **head, int index, int data) {
-  struct Node *new_node = (struct Node*)malloc(sizeof(struct Node));
-  new_node->data = data;
-  new_node->next = NULL;
-
-  if (index == 0) {
-    new_node->next = *head;
-    *head = new_node;
-    return;
-  } else if (*head != NULL) {
-    struct Node *cur = *head;
-    for (int i = 1; cur != NULL && i < index; i++) {
-      cur = cur->next;
-    }
-    new_node->next = cur->next;
-    cur->next = new_node;
-  }
-}
-int main() {
+int main(int argc, char** argv) {
   struct Node *head = NULL;
-  Node_t *head2 = NULL;
+  push(&head, 20);
+  push(&head, 30);
+  push(&head, 40);
 
-  append(&head, 10);
-  append(&head, 20);
-  append(&head, 30);
+  push_top(&head, 10);
+  insert_by_value(&head, 45);
+  insert_by_index(&head, 2, 35);
 
-  insertByValue(&head, 35);
-
-  deleteByValue(&head, 30);
-
-  deleteByIndex(&head, 0);
-  insertByIndex(&head, 0, 40);
-
-
-
-  insert2(&head2, 40);
-  insert2(&head2, 50);
-  insert2(&head2, 60);
-
-  traverse2(head2);
-
+  //pop_last(&head);
+  //pop(&head);
+  //pop_last(&head);
+  //pop(&head);
+  //pop(&head);
+  //pop(&head);
+  //remove_by_value(&head, 15);
+  remove_by_index(&head, 3);
+  
   traverse(head);
-
   return 0;
 }
-
-
-/*
-1. traverse
-2. append 
-3. delete (remove) by position
-4. Insert with index
-5. Insert with value (less or large)
-6. delete by value
-*/
