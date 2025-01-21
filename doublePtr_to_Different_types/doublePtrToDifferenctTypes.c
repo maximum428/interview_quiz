@@ -20,7 +20,7 @@ void demo() {
     *(int*)v_ptr = 14;
     void **vv_ptr = &int_ptr;
     *(int*)*vv_ptr = 15;
-    void ***vvv_ptr = *vv_ptr;
+    void ***vvv_ptr = &vv_ptr;
     *(int*)**vvv_ptr = 16;
     
     cout << *(int*)v_ptr << endl;
