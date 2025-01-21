@@ -22,8 +22,14 @@ int pop(List_Node_t **head) {
     int retval = -1;
     List_Node_t *next_node = NULL;
         
-    if (*head == NULL)
+    if (*head == NULL) {
         return retval;
+    } else if ((*head)->next == NULL) {
+      retval = (*head)->data;
+      *head = NULL;
+      free(*head);
+      return res;
+    }
     
     next_node = (*head)->next;
     retval = (*head)->val;
