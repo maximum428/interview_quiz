@@ -165,6 +165,17 @@ int remove_by_index(struct Node **head, int index) {
   return ret;
 }
 
+void reverse(struct Node **head) {
+  struct Node *curr, *prev = NULL, *tmp = NULL;
+  while (curr != NULL) {
+    tmp = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = tmp;
+  }
+  *head = prev;
+}
+
 void traverse(struct Node *head) {
   if (head == NULL) {
     return;
