@@ -333,6 +333,7 @@ public:
         std::cout << "Do Some Handshaking" << std::endl;
         std::unique_lock<std::mutex> mlock(m_mutex);
         m_condVar.wait(mlock, std::bind(&Application::isDataLoaded, this));
+        m_DataLoaded = false;
         std::cout << "Do Processing On loaded Data" << std::endl;
     }
 };
@@ -351,15 +352,26 @@ int main() {
 #include <thread>
 #include <future>
 
+#if 1
+void initializer(std::promise<int>& promiseObj) {
+   std::cout << "Inside Thread\n";
+   promiseObj.set_value(5);
+}
+#else
 void initializer(std::promise<int> *promiseObj) {
     std::cout << "Inside Thread" << std::endl;
     promiseObj->set_value(5);
 }
+#endif
 
 int main() {
     std::promise<int> promiseObj;
     std::future<int> futureObj = promiseObj.get_future();
+#if 1
+    std::thread threadObj(initializer, std::ref(promiseObj));
+#else
     std::thread threadObj(initializer, &promiseObj);
+#endif
     std::cout << futureObj.get() << std::endl;
     threadObj.join();
     return 0;
