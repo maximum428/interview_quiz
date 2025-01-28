@@ -130,6 +130,7 @@ int main() {
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct ThreadData {
   int x;
@@ -138,14 +139,14 @@ struct ThreadData {
 };
 
 void *thread_func(void* arg) {
-  ThreadData* data = (ThreadData*)arg;
+  struct ThreadData* data = (struct ThreadData*)arg;
   printf("Passed Number: %d\n", data->x);
   printf("Passed String: %s\n", data->str);
   printf("Passed Desc: %s\n", data->desc);
   return NULL;
 }
 int main() {
-  ThreadData* data = (ThreadData*)malloc(sizeof(ThreadData));
+  struct ThreadData* data = (struct ThreadData*)malloc(sizeof(struct ThreadData));
   data->x = 10;
   data->str = "Sample string";
   memset(data->desc, 0, 128);
