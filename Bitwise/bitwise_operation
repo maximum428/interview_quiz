@@ -5,6 +5,7 @@ num |= 1UL << pos;
 
 // Clear bit
 num &= ~(1UL << pos);
+num &= !(1 << pos);  // For Rust
 
 // Toggle bit
 num ^= 1UL << pos;
@@ -23,8 +24,10 @@ num ^= ((x << pos1) | (x << pos2))
 
 // Extract last bit
 bit = num & -num;
+let bit = num & num.wrappint_neg();  // For Rust
 or
-bit = num & ~(num - 1)
+bit = num & ~(num - 1);
+let bit = num & !(num - 1);  // For Rust
 
 //Note:   -num is equal to ~(num - 1)
 
@@ -53,6 +56,7 @@ res = (((1 << len) - 1) & (n >> (pos - 1)));
 
 // Find posiiton of rightmost set(1) bit:
 int pos = log2(n & -n);
+let pos = (num & num.wrapping_neg()).trailing_zeros() as usize;  // For Rust
 
 5:   0000 0101
 ~5:  1111 1010
