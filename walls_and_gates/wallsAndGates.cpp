@@ -3,7 +3,11 @@ public:
     void wallsAndGates(vector<vector<int>>& rooms) {
 #if 1
         queue<pair<int, int>> q;
-        vector<vector<int>> dirs = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+        //vector<vector<int>> dirs = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+        //array<pair<int, int>, 4> dir = {{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}};
+        // or 
+        array<pair<int, int>, 4> dir{pair<int, int>{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+        
         for (int i = 0; i < rooms.size(); i++) {
             for (int j = 0; j < rooms.[i].size(); j++) {
                 if (rooms[i][j] == 0)
@@ -13,8 +17,13 @@ public:
         while (!q.empty()) {
             int i = q.front().first, j = q.front().second;
             q.pop();
+#if 1
+            for (auto [dx, dy] : dirs) {
+                int x = i + dx, y = j + dy;
+#else
             for (int k = 0; k < dirs.size(); k++) {
                 int x = i + dirs[k][0], y = j + dirs[k][1];
+#endif
                 if (x < 0 || y < 0 || x >= rooms.size() || y >= rooms[0].size() || rooms[x][y] < rooms[i][j] + 1)
                     continue;
                 rooms[x][y] = rooms[i][j] + 1;
