@@ -69,7 +69,8 @@ let pos = (num & num.wrapping_neg()).trailing_zeros() as usize;  // For Rust
 -4:  1111 1100
 
 
-auto m = min_element(mp.begin(), mp.end(), [](decltype(mp)::value& l, decltype(mp)::value& r) -> bool { return l.second < r.second; });
+auto maxIt = max_element(mp.begin(), mp.end(), [](const auto& l, const auto& r) -> bool { return l.second < r.second; });
+auto minIt = min_element(mp.begin(), mp.end(), [](const auto& l, const auto& r) -> bool { return l.second < r.second; });
 
 // Convert lower case to upper case
 str[i] -= 32;
