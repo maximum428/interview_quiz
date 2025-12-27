@@ -350,6 +350,50 @@ int main() {
 /*************************************************************************************/
 #include <iostream>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
+
+mutex mtx;
+condition_variable cv;
+bool ready = false;
+
+using namespace std;
+
+void worker() {
+    // Simulate work
+    this_thread::sleep_for(chrono::seconds(2));
+    {
+        lock_guard guard(mtx);
+        ready = true;
+    }
+    cv.notify_one();
+}
+
+int main() {
+    thread t(worker);
+    unique_lock lock(mtx);
+    
+    auto status = cv.wait_for(lock, chrono::seconds(1), []{ return ready; });
+    if (status) {
+        cout << "Worker finished within timeout\n";
+    } else {
+        cout << "Timeout! Worker still running\n";
+    }
+    
+    // Optional: wait again until it actually finishes
+    cv.wait(lock, []{ return ready; });
+    
+    cout << "Confirmed worker finished\n";
+    
+    lock.unlock();
+    t.join();
+    
+    return 0;
+}
+/*************************************************************************************/
+#include <iostream>
+#include <thread>
 #include <future>
 
 #if 1
