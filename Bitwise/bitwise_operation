@@ -85,6 +85,9 @@ str[i] -= ('Z' - 'z');
 // Cover char to integer
 int n = str[i] - '0';
 
+// Get the coresponding index of char
+int idx = str[i] - 'a';
+
 =======================================================================
 #include <iostream>
 #include <vector>
