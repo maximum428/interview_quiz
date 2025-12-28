@@ -426,45 +426,56 @@ int main() {
 #include <chrono>
 #include <thread>
 
+#include <future>
+#include <ctime>
+
 using namespace std::chrono;
 
-std::string fetchDataFromDB(std::string recvdData) {
+std::string fetchDataFromDB(const std::string& recvdData) {
     std::this_thread::sleep_for(seconds(1));
     return "DB_" + recvdData;
 }
 
-std::string fetchDataFromFile(std::string recvdData) {
+std::string fetchDataFromFile(const std::string& recvdData) {
     std::this_thread::sleep_for(seconds(1));
     return "File_" + recvdData;
 }
 
 int main() {
-    system_clock::time_point start = system_clock::now();
+    //system_clock::time_point start = system_clock::now();
+    auto start = chrono::steady_clock::now();
+
+    auto dbFuture = async(launch::async, fetchDataFromDB, "Data");
+    auto fileFuture = async(launch::async, fetchDataFromFile, "Data");
+
+    std::string dbData = dbFuture.get();  // fetchDataFromDB("Data");
+    std::string fileData = fileFuture.get();  // fetchDataFromFile("Data");
     
-    std::string dbData = fetchDataFromDB("Data");
-    std::string fileData = fetchDataFromFile("Data");
-    
-    auto end = system_clock::now();
+    auto end = chrono::steady_clock::now();  // chrono::system_clock::now();
     auto diff = duration_cast<std::chrono::seconds> (end - start).count();
     std::cout << "Total Time Taken = " << diff << " Seconds" << std::endl;
     std::string data = dbData + " :: " + fileData;
     
     std::cout << "Data = " << data << std::endl;
 
+    auto now = chrono::system_clock::now();
+
     // Convert to time_t
-    time_t time = chrono::system_clock::to_time_t(end);
+    time_t time = chrono::system_clock::to_time_t(now);
 
     // Convert to tm struct
-    tm* tm = localtime(&time);
+    tm local_tm{};
+    localtime_r(&time, &local_tm);
+    // tm* tm = localtime(&time);
 
     // Format the time using strftime
     char buffer[80];
-    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm);
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &local_tm);  // tm);
 
     // Create a string from the formatted time
-    string timestamp(buffer);
-
-    cout << timestamp << endl;
+    // string timestamp(buffer);
+    // cout << timestamp << endl;
+    cout << buffer << endl;
 
     return 0;
 }
