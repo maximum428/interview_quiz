@@ -128,5 +128,13 @@ int main(int argc, char** argv) {
     cout << "Upper bound: " << nums[UpperBound(nums, 4)] << endl;
     return 0;
 }
+=======================================================================
+#include <array>
 
+array<pair<int, int>, 4> dirs{pair<int, int>{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+
+for (const auto [dx, dy] : dirs) {
+    int x = r + dx, y = c + dy;
+}
+=======================================================================
 
