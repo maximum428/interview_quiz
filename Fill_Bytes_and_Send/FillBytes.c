@@ -53,9 +53,14 @@ void method2(Data *data) {
 }
 
 int main(void) {
-    uint8_t *bytes = malloc(16 * sizeof(uint8_t));
-    
+    uint8_t *bytes = malloc(16);
+    if (!bytes) return 1;
+
+    for (int i = 0; i < 8; i++) {
+        bytes[i] = i;
+    }
     receive(&bytes, 8);
+    free(bytes);
     
     Data *data;
     method1(data);
