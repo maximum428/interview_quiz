@@ -32,7 +32,7 @@ let bit = num & !(num - 1);  // For Rust
 //Note:   -num is equal to ~(num - 1)
 
 // Remove last bit
-num & (num - 1)
+num &= (num - 1)
 
 // reverse bits
 int res = 0;
