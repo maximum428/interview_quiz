@@ -2,22 +2,23 @@
 #include <stdlib.h>
 
 #define MIN(x, y)   x ^ ((x ^ y) & -(x < y))
+#define BYTES_SIZE  16
 
 void receive(const uint8_t *bytes, size_t nbytes) {
-    static uint8_t buffer[16];
+    static uint8_t buffer[BYTES_SIZE];
     static size_t curlength = 0;
     
     while (nbytes > 0) {
-        size_t to_copy = MIN(16 - curlength, nbytes);
+        size_t to_copy = MIN(BYTES_SIZE - curlength, nbytes);
         memcpy(buffer + currlength, bytes, to_copy);
         
         curlength += to_copy;
         bytes += to_copy;
         nbytes -= to_copy;
         
-        if (curlength == 16) {
+        if (curlength == BYTES_SIZE) {
             // send(buffer);
-            printf("Sedn 16 bytes\n");
+            printf("Send %d bytes\n", BYTES_SIZE);
             curlength = 0;
         }
     }
