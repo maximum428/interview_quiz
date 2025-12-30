@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 int compare(const void* a, const void* b) {
-    return (*(int*)a - *(int*)b);
+    //return (*(int*)a - *(int*)b);
+    return (*(int*)a > *(int*)b) - (*(int*)a < *(int*)b);
 }
 
 void backtrack(int* nums, int nums_size, int* res_size, int*** res, int* vec, int vec_size, int value, int start) {
