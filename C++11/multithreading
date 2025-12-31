@@ -481,54 +481,55 @@ int main() {
 }
 /*************************************************************************************/
 #include <iostream>
-#include <string>
-#include <chrono>
 #include <thread>
 #include <future>
+#include <chrono>
 
-using namespace std::chrono;
+using namespace std;
 
-std::string fetchDataFromDB(std::string recvdData) {
-    std::this_thread::sleep_for(seconds(1));
+string fetchDataFromDB(const string recvdData) {
+    this_thread::sleep_for(chrono::seconds(1));
     return "DB_" + recvdData;
 }
 
-std::string fetchDataFromFile(std::string recvdData) {
-    std::this_thread::sleep_for(seconds(1));
-    return "File_" + recvdData;
+string fetchDataFromRAM(const string recvdData) {
+    this_thread::sleep_for(chrono::seconds(1));
+    return "RAM_" + recvdData;
 }
 
 struct DataFetcher {
-    std::string operator()(std::string recvdData) {
-        std::this_thread::sleep_for(seconds(1));
-        return "DB_" + recvdData;
+    string operator()(const string recvdData) {
+        this_thread::sleep_for(chrono::seconds(1));
+        return "FILE_" + recvdData;
     }
 };
 
 int main() {
-    system_clock::time_point start = system_clock::now();
+    chrono::system_clock::time_point start = chrono::system_clock::now();
     
-    //std::future<std::string> resultFromDB = std::async(std::launch::async, fetchDataFromDB, "Data");
-    //std::future<std::string> resultFromDB = std::async(std::launch::async, DataFetcher(), "Data");
-    std::future<std::string> resultFromDB = std::async([](std::string recvdData) {
-        std::this_thread::sleep_for(seconds(1));
-        return "DB_" + recvdData;
+    future<string> resultFromDB = async(launch::async, fetchDataFromDB, "Data");
+    future<string> resultFromFile = async(launch::async, DataFetcher(), "Data");
+    future<string> resultFromStream = async([](const string recvdData) -> string {
+        this_thread::sleep_for(chrono::seconds(1));
+        return "STREAM_" + recvdData;
     }, "Data");
     
-    std::string fileData = fetchDataFromFile("Data");
+    string ramData = fetchDataFromRAM("Data");
     
-    std::string dbData = resultFromDB.get();
+    string dbData = resultFromDB.get();
+    string fileData = resultFromFile.get();
+    string streamData = resultFromStream.get();
     
-    auto end = system_clock::now();
+    auto end = chrono::system_clock::now();
     
-    auto diff = duration_cast<std::chrono::seconds> (end - start).count();
+    auto diff = duration_cast<chrono::seconds>(end - start).count();
     
-    std::cout << "Total Time Taken = " << diff << " Seconds" << std::endl;
+    cout << "Total Time Taken = " << diff << " seconds.\n";
     
-    std::string data = dbData + " :: " + fileData;
+    string data = ramData + " :: " + dbData + " :: " + fileData + " :: " + streamData;
     
-    std::cout << "Data = " << data << std::endl;
-    
+    cout << "Data = " << data << endl;
+
     return 0;
 }
 
