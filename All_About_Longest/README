@@ -162,6 +162,19 @@ int lengthOfLIS(vector<int>& nums) {
    return res;
 }
 
+----------------------------------------------------------------------
+int lengthOfLIS(const vector<int>& nums) {
+    vector<int> tails;
+    for (int x : nums) {
+        auto it = lower_bound(tails.begin(), tails.end(), x);
+        if (it == tails.end())
+            tails.push_back(x);
+        else
+            *it = x;
+    }
+    return tails.size();
+}
+
 /*******************************************************************/
 /*** Longest Ascending (Increasing) Subsequence ***/
 /* [5, 2, 6, 3, 4, 7, 5] */
