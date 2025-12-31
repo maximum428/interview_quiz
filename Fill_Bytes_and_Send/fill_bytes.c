@@ -24,6 +24,11 @@ void receive(const uint8_t *bytes, size_t nbytes) {
     }
 }
 
+typedef struct {
+    int val;
+    char name[128];
+} Data;
+
 void method(FILE *fd, Data *data) {
     size_t total = 0;
     unsigned char *ptr = (unsigned char*)data;
@@ -51,7 +56,7 @@ int main() {
         return 1;
     }
     
-    Data *data;
+    Data data;
     method(fd, &data);
     
     fclose(fd);
