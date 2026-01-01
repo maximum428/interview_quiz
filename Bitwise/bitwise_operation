@@ -77,13 +77,13 @@ str[i] -= 32;
 or
 str[i] += ('Z' - 'z');
 
-// Cover upper case to lower case
+// Convert upper case to lower case
 str[i] += 32;
 or
 str[i] -= ('Z' - 'z');
 
-// Cover char to integer
-int n = str[i] - '0';
+// Convert char to integer
+int n = str[i] - '0';   // '5' -> 5
 
 // Get the coresponding index of char
 int idx = str[i] - 'a';
