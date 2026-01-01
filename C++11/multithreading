@@ -36,7 +36,7 @@ int main() {
 pthread_mutex_t lock;
 
 void *thread_function(void *id) {
-  printf("Inside thread function : thread id = %d\n", (int*)id);
+  printf("Inside thread function : thread id = %d\n", *(int*)id);
   return NULL;
 }
 int main(int argc, char** argv) {
