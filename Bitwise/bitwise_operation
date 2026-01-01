@@ -86,7 +86,17 @@ str[i] -= ('Z' - 'z');
 int n = str[i] - '0';   // '5' -> 5
 
 // Get the coresponding index of char
+// 最常用在「字元 → 0-based 整數索引」的轉換，特別是處理 小寫英文字母 'a' ~ 'z' 的情境。
 int idx = str[i] - 'a';
+
+/*
+int x = str[i] - 'a';   // 若 str[i] 不是 'a'~'z' → 出錯
+✅ 正確寫法
+c
+Copy code
+if (str[i] >= 'a' && str[i] <= 'z') {
+    int x = str[i] - 'a';
+}*/
 
 =======================================================================
 #include <iostream>
