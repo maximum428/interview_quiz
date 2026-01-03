@@ -1,7 +1,7 @@
 #include <stdiolh>
 #include <stdlib.h>
 
-#define MIN(x, y)   x ^ ((x ^ y) & -(x < y))
+#define MIN(x, y)   y ^ ((x ^ y) & -(x < y))
 #define BYTES_SIZE  16
 
 void receive(const uint8_t *bytes, size_t nbytes) {
