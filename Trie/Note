@@ -1,0 +1,155 @@
+1️⃣ 面試一句話設計思路（必背）
+
+使用 Trie 儲存字典，
+搜尋時遇到普通字元沿單一路徑走，
+遇到 . 則 DFS 嘗試所有子節點，
+任一分支成功即回傳 true。
+
+2️⃣ Trie 通用結構模板（可套 80% 題目）
+struct TrieNode {
+    bool isWord;
+    TrieNode* child[26];
+
+    TrieNode() : isWord(false) {
+        memset(child, 0, sizeof(child));
+    }
+};
+
+
+📌 面試官看到這個結構就知道你是「標準解」
+
+3️⃣ wildcard 搜尋 DFS 模板（核心必背）
+bool dfs(const string& word, int pos, TrieNode* node) {
+    if (!node) return false;
+
+    if (pos == word.size())
+        return node->isWord;
+
+    char c = word[pos];
+    if (c != '.') {
+        return dfs(word, pos + 1, node->child[c - 'a']);
+    } else {
+        for (int i = 0; i < 26; i++) {
+            if (node->child[i] &&
+                dfs(word, pos + 1, node->child[i]))
+                return true;
+        }
+        return false;
+    }
+}
+
+
+👉 這一段可以整段背起來
+
+4️⃣ 記憶體釋放模板（面試加分）
+void freeTrie(TrieNode* node) {
+    if (!node) return;
+    for (int i = 0; i < 26; i++)
+        freeTrie(node->child[i]);
+    delete node;
+}
+
+5️⃣ 最終【面試模板完整版】🔥
+#include <iostream>
+#include <string>
+#include <cstring>
+using namespace std;
+
+class WordDictionary {
+private:
+    struct TrieNode {
+        bool isWord;
+        TrieNode* child[26];
+        TrieNode() : isWord(false) {
+            memset(child, 0, sizeof(child));
+        }
+    };
+
+    TrieNode* root;
+
+    bool dfs(const string& word, int pos, TrieNode* node) {
+        if (!node) return false;
+        if (pos == word.size())
+            return node->isWord;
+
+        char c = word[pos];
+        if (c != '.') {
+            return dfs(word, pos + 1, node->child[c - 'a']);
+        } else {
+            for (int i = 0; i < 26; i++) {
+                if (node->child[i] &&
+                    dfs(word, pos + 1, node->child[i]))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    void freeTrie(TrieNode* node) {
+        if (!node) return;
+        for (int i = 0; i < 26; i++)
+            freeTrie(node->child[i]);
+        delete node;
+    }
+
+public:
+    WordDictionary() {
+        root = new TrieNode();
+    }
+
+    ~WordDictionary() {
+        freeTrie(root);
+    }
+
+    void addWord(const string& word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int idx = c - 'a';
+            if (!node->child[idx])
+                node->child[idx] = new TrieNode();
+            node = node->child[idx];
+        }
+        node->isWord = true;
+    }
+
+    bool search(const string& word) {
+        return dfs(word, 0, root);
+    }
+};
+
+6️⃣ 常見面試變形怎麼「秒改」
+🔹 支援大小寫
+child[52]   // A–Z + a–z
+
+🔹 支援任意 ASCII
+unordered_map<char, TrieNode*> child;
+
+🔹 不用 recursion（防 stack overflow）
+
+→ BFS + stack（進階題）
+
+🔹 加上 prefix 搜尋
+bool startsWith(string prefix)
+
+7️⃣ 面試官追問時你可以這樣回（加分）
+
+這個設計在搜尋包含 wildcard 時最壞時間是 O(26^L)，
+但實際上 Trie 結構會大量剪枝，
+在字典規模大、字串長度有限時效能表現良好。
+
+🎯 結語
+
+你現在這份 已經是「可以背進面試」的模板，
+之後遇到：
+
+Word Search
+
+Wildcard Match
+
+Prefix Dictionary
+
+Autocomplete
+
+Regex-like matching
+
+👉 直接套這一套 Trie + DFS
