@@ -148,3 +148,43 @@ for (const auto [dx, dy] : dirs) {
 }
 =======================================================================
 
+Sliding Window（Permutation / Anagram）「可背模板」
+✅ 固定長度 + 字元頻率（26 letters）
+bool slidingWindow(string s1, string s2) {
+    if (s1.size() > s2.size()) return false;
+
+    vector<int> cnt(26, 0);
+    for (char c : s1) cnt[c - 'a']++;
+
+    int left = 0, right = 0;
+    int need = s1.size();
+
+    while (right < s2.size()) {
+        // 1️⃣ 擴張右邊
+        if (cnt[s2[right] - 'a'] > 0)
+            need--;
+        cnt[s2[right] - 'a']--;
+        right++;
+
+        // 2️⃣ 命中條件
+        if (need == 0) return true;
+
+        // 3️⃣ 維持固定長度（shrink）
+        if (right - left == s1.size()) {
+            if (cnt[s2[left] - 'a'] >= 0)
+                need++;
+            cnt[s2[left] - 'a']++;
+            left++;
+        }
+    }
+    return false;
+}
+
+二、口訣版（面試時腦中默念）
+🧠 四句話背起來
+
+1️⃣ 右邊進來，先扣表
+2️⃣ 扣到需要的，need--
+3️⃣ 視窗太大，左邊出去
+4️⃣ 出的是需要的，need++
+======================================================================
