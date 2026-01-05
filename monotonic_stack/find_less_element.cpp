@@ -10,7 +10,7 @@ vector<int> findPrevLess(vector<int> nums) {
   stack<int> in_stk;
 
   for (int i = 0; i < nums.size(); i++) {
-    while (!in_stk.empty() && nums[in_stk.top()] > nums[i]) {
+    while (!in_stk.empty() && nums[i] <= nums[in_stk.top()]) {
       in_stk.pop();
     }
     previous_less[i] = in_stk.empty() ? -1 : in_stk.top();
@@ -25,10 +25,9 @@ vector<int> findNextLess(vector<int> nums) {
   stack<int> in_stk;
 
   for (int i = 0; i < nums.size(); i++) {
-    while (!in_stk.empty() && nums[in_stk.top()] > nums[i]) {
-      auto x = in_stk.top();
+    while (!in_stk.empty() && nums[i] < nums[in_stk.top()]) {
+      next_less[in_stk.top()] = i;
       in_stk.pop();
-      next_less[x] = i;
     }
     in_stk.push(i);
   }
@@ -41,7 +40,7 @@ vector<int> findPrevLarge(vector<int> nums) {
   stack<int> in_stk;
 
   for (int i = 0; i < nums.size(); i++) {
-    while (!in_stk.empty() && nums[in_stk.top()] < nums[i]) {
+    while (!in_stk.empty() && nums[i] >= nums[in_stk.top()]) {
       in_stk.pop();
     }
     previous_large[i] = in_stk.empty() ? -1 : in_stk.top();
@@ -56,10 +55,9 @@ vector<int> findNextLarge(vector<int> nums) {
   stack<int> in_stk;
 
   for (int i = 0; i < nums.size(); i++) {
-    while (!in_stk.empty() && nums[in_stk.top()] < nums[i]) {
-      auto x = in_stk.top();
+    while (!in_stk.empty() && nums[i] > nums[in_stk.top()]) {
+      next_large[in_stk.top()] = i;
       in_stk.pop();
-      next_large[x] = i;
     }
     in_stk.push(i);
   }
