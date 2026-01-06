@@ -43,5 +43,5 @@ vector<vector<int>> threeSum(vector<int> nums) {
     vector<int> vec;
     sort(nums.begin(), nums.end());
     backtrack(nums, res, vec, 0, 0);
-    return 0;
+    return res;
 }
