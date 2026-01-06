@@ -5,7 +5,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
         for (int i = 0; i < nums.size(); i++) {
             int compliment = target - nums[i];
             if (mp.find(complement) != mp.end())
-                return {mp[compliment], i]}
+                return {mp[compliment], i}
             mp[nums[i]] = i;
         }
         
