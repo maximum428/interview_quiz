@@ -1,4 +1,4 @@
-/*** Longest non-repeat list ***/
+d/*** Longest non-repeat list ***/
 /* ["Alex", "Alison", "Alina", "Aileen", "Alex"] */
 /* Result: 4    (["Alex", "Alison", "Alina", "Aileen"] */
 int lengthOfLongestList(vector<string> strs) {
@@ -102,7 +102,7 @@ void helper(string& s, int left, int right, int& start, int& len) {
 /*** Longest Valid Parentheses ***/
 /* ")()())" */
 /* Result: 4,   "()()"  */
-int longestValidParentests(string s) {
+int longestValidParentheses(string s) {
    int maxlen = 0;
    stack<int> st;
    st.push(-1);
