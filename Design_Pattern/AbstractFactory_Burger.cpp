@@ -254,7 +254,7 @@ public:
                                                           m_Mustard(factory->CreateMustard()) {}
     virtual ~McDonaldsBurger() {}
     virtual void Prepare() {
-        cout << "Preparing Burger King Burger\n";
+        cout << "Preparing McDonalds Burger\n";
         m_Bun->Prepare();
         m_Pattie->Prepare();
         m_Pickles->Prepare();
