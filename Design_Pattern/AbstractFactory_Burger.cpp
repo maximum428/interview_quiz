@@ -1,6 +1,29 @@
 /*
 "The Abstract Factory Pattern provides an interface for creating families of related or dependent 
 objects without specifying their concrete classes"
+
+用生活例子一次懂
+🍔 速食店點餐（最經典）
+
+你說：
+
+「我要一份漢堡套餐」
+
+你 沒有說：
+
+芝麻麵包 or 無芝麻
+
+哪一種肉
+
+哪一種醬
+
+餐廳內部用的是：
+店家	原料組
+Burger King	芝麻麵包 + Flame broiled pattie
+McDonald's	無芝麻麵包 + Grilled pattie
+
+👉 你不指定 concrete class
+👉 店家（factory）幫你決定一整組
 */
 #include <iostream>
 
