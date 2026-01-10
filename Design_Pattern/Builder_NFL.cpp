@@ -187,5 +187,7 @@ int main() {
     scheduler.ConstructSchedule();
     GameSchedule *schedule = gameScheduleBuilder->GetSchedule();
     schedule->Display();
+
+    delete gameScheduleBuilder;
     return 0;
 }
