@@ -10,24 +10,15 @@ constexpr auto tenMill = 10000000;
 class MySingleton {
 public:
     static MySingleton& getInstance() {
-        //call_once(initInstanceFlag, &MySingleton::initSingleton);
         static MySingleton instance;
         return instance;
     }
+
 private:
     MySingleton() = default;
     MySingleton(const MySingleton&) = delete;
     MySingleton& operator=(const MySingleton&) = delete;
-    
-    static MySingleton *instance;
-    static once_flag initInstanceFlag;
-    static void initSingleton() {
-        instance = new MySingleton();
-    }
 };
-
-MySingleton *MySingleton::instance = nullptr;
-once_flag MySingleton::initInstanceFlag;
 
 chrono::duration<double> getTime() {
     auto begin = chrono::steady_clock::now();
