@@ -56,3 +56,59 @@ int main() {
     delete robotDog;
     return 0;
 }
+
+
+/**************************************************************************
+ *****************   Smart Pointer Version *****************
+ **************************************************************************/
+
+#include <iostream>
+#include <memory>
+#include <string>
+
+using namespace std;
+using namespace std::string_literals;
+
+class Dog {
+public:
+    virtual ~Dog() = default;
+    virtual void Bark() = 0;
+};
+
+class LivingDog : public Dog {
+    string m_name;
+public:
+    LivingDog(string name) : m_name(move(name)) {}
+    void Bark() override {
+        cout << m_name << " is barking!\n";
+    }
+};
+
+class RobotDog {
+    string m_name;
+public:
+    RobotDog(string name) : m_name(move(name)) {}
+    virtual ~RobotDog() {}
+    void PlayBarkingSound() {
+        cout << m_name << " is playing barking sound.\n";
+    }
+};
+
+class RobotDogAdapter : public Dog {
+    unique_ptr<RobotDog> m_RobotDog;
+public:
+    explicit RobotDogAdapter(unique_ptr<RobotDog> robotDog) : m_RobotDog(move(robotDog)) {}
+    virtual void Bark() override {
+        m_RobotDog->PlayBarkingSound();
+    }
+};
+
+int main(int argc, char** argv) {
+    unique_ptr<Dog> livingDog = make_unique<LivingDog>("Chester"s);
+    livingDog->Bark();
+    
+    unique_ptr<Dog> robotDog = make_unique<RobotDogAdapter>(make_unique<RobotDog>("Sony's Aibo"s));
+    robotDog->Bark();
+    
+    return 0;
+}
