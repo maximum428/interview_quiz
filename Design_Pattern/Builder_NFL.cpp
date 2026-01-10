@@ -1,5 +1,37 @@
 /*
 The Builder Pattern allows you to encapsulate the construction of a product and allow it to be constructed in steps.
+
+白話解釋（最直覺）
+
+Builder Pattern 把「怎麼蓋東西」藏起來，讓你可以一步一步把它蓋好。
+
+重點有兩個：
+
+封裝建構過程（encapsulate construction）
+
+使用者 不用知道
+
+物件怎麼 new
+
+內部有哪些零件
+
+建構順序怎麼安排
+
+分步驟建構（constructed in steps）
+
+可以：
+
+先加這個
+
+再加那個
+
+最後才拿到成品
+
+👉 就像 點漢堡
+
+你只說：加牛肉、加起司、不加洋蔥
+
+廚房怎麼做你不用管
 */
 #include <iostream>
 
