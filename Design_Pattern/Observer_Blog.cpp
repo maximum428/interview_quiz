@@ -1,3 +1,49 @@
+/*
+Observer Pattern（觀察者模式）是一種 行為型設計模式，它允許 一個對象（Subject/主題）在狀態改變時，通知一群依賴於它的對象（Observers/觀察者），而且這些觀察者可以自動更新自己。
+
+它的核心目標是 解耦：Subject 不需要知道有多少 Observer，也不需要知道它們具體的行為，只要能通知它們即可。
+
+主要角色
+
+1. Subject（主題 / 被觀察者）
+
+    - 保存觀察者列表。
+
+    - 提供註冊（subscribe）和取消註冊（unsubscribe）功能。
+
+    - 當自身狀態改變時，調用 Notify() 通知所有觀察者。
+
+2. Observer（觀察者）
+
+    - 定義一個接口（interface），通常有一個 update() 或 BlogUpdate() 方法。
+
+    - 當 Subject 狀態改變時，該方法會被呼叫。
+
+3. ConcreteSubject（具體主題）
+
+    - 實作 Subject 接口，保存自身狀態（如 blog 內容）。
+
+    - 當狀態改變時，呼叫 Notify() 通知觀察者。
+
+4. ConcreteObserver（具體觀察者）
+
+    - 實作 Observer 接口。
+
+    - 保存對 Subject 的引用，以便在通知時取得最新狀態。
+
+
+特點 / 優點
+
+1. 解耦：Subject 不知道觀察者的具體類型。
+
+2. 動態關聯：觀察者可以隨時訂閱或取消訂閱。
+
+3. 支援多個觀察者：一個 Subject 可以有多個 Observer，互不影響。
+
+4. 廣泛應用：GUI 事件監聽（button click）、數據變更通知（MVC 模式）、新聞/訊息推送系統。
+*/
+
+
 #include <iostream>
 
 using namespace std;
