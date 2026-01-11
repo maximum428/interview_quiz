@@ -1,6 +1,35 @@
 /*
 The Composite Pattern allows you to compose objects into tree structures to represent part-whole hierarchies. 
 Composite lets clients treat individual objects and compositions of objects uniformly.
+
+一、白話翻譯（先懂意思）
+
+Composite Pattern 讓你把物件組合成樹狀結構，用來表示「部分–整體」的關係。
+它讓使用者可以用「同一種方式」對待單一物件與由多個物件組成的集合。
+
+簡單說就是：
+
+👉 「一個東西」和「一堆東西」看起來是一樣的
+
+二、什麼是「part–whole hierarchy」？
+
+意思是這種結構：
+
+整體
+ ├── 部分
+ │    ├── 子部分
+ │    └── 子部分
+ └── 部分
+
+
+實際例子：
+
+領域	整體	部分
+檔案系統	資料夾	檔案 / 子資料夾
+UI	視窗	按鈕、Panel
+書籍	書櫃	書、分類
+組織	部門	員工
+你剛寫的程式	BookGroup	Book
 */
 
 #include <iostream>
