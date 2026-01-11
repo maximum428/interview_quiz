@@ -1,6 +1,14 @@
 /*
 The Template Method Pattern defines a skeleton of an algorithm in a method deferring some steps to subclasses. 
 Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm’s structure
+
+一句話版
+
+Template Method Pattern 是：
+
+父類別先把「做事情的流程」寫好，但把某些步驟留給子類別自己實作。
+
+流程不變，細節可變。
 */
 #include <iostream>
 
