@@ -155,3 +155,140 @@ int main() {
     
     return 0;
 }
+
+
+/*****************************************************************************************
+*************************** Smart Pointer Version ****************************************
+******************************************************************************************/
+
+#include <iostream>
+#include <mutex>
+#include <vector>
+#include <memory>
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+
+class BlogObserver {
+public:
+    virtual ~BlogObserver() {}
+    virtual void BlogUpdate() = 0;
+};
+
+class StringData {
+public:
+    virtual ~StringData() {}
+    virtual string GetData() = 0;
+};
+
+class BlogSubject {
+public:
+    virtual ~BlogSubject() {}
+    virtual void Subscribe(shared_ptr<BlogObserver> observer) = 0;
+    virtual void Unsubscribe(shared_ptr<BlogObserver> observer) = 0;
+    virtual void Notify() = 0;
+};
+
+class MyBlog : public BlogSubject, public enable_shared_from_this<MyBlog> {
+public:
+    class BlogData : public StringData {
+        string m_data;
+    public:
+        BlogData() {}
+        virtual ~BlogData() {}
+        virtual string GetData() { return m_data; }
+        void SetData(string data) { m_data = data; }
+    };
+    
+    MyBlog() : m_BlogData(make_unique<BlogData>()) {}
+    virtual ~MyBlog() {}
+    virtual void Subscribe(shared_ptr<BlogObserver> observer) {
+        lock_guard guard(m_mutex);
+        m_observers.push_back(observer);
+    }
+    virtual void Unsubscribe(shared_ptr<BlogObserver> observer) {
+        lock_guard guard(m_mutex);
+        m_observers.erase(remove_if(
+            m_observers.begin(), m_observers.end(),
+            [&observer](const weak_ptr<BlogObserver>& wptr) {
+                auto sp = wptr.lock();
+                return sp == nullptr || sp == observer;
+            }),
+            m_observers.end()
+        );
+    }
+    virtual void Notify() {
+        lock_guard guard(m_mutex);
+        for (auto& wptr : m_observers) {
+            if (auto observer = wptr.lock())
+                observer->BlogUpdate();
+        }
+    }
+    BlogData *GetData() {
+        return m_BlogData.get();
+    }
+    void SetData(const string& data) {
+        m_BlogData->SetData(data);
+        Notify();
+    }
+private:
+    unique_ptr<BlogData> m_BlogData;
+    mutex m_mutex;
+    vector<weak_ptr<BlogObserver>> m_observers;  // use weak_ptr to avoid cycles
+};
+
+class Boss : public BlogObserver, public enable_shared_from_this<Boss> {
+    shared_ptr<MyBlog> m_Blog;
+public:
+    Boss(shared_ptr<MyBlog> blog) : m_Blog(blog) {}
+    virtual ~Boss() {}
+    virtual void BlogUpdate() {
+        string data = m_Blog->GetData()->GetData();
+        cout << "Boss received \"" << data << "\"\n";
+    }
+};
+
+class CoWorker : public BlogObserver, public enable_shared_from_this<CoWorker> {
+    shared_ptr<MyBlog> m_Blog;
+public:
+    CoWorker(shared_ptr<MyBlog> blog) : m_Blog(blog) {}
+    virtual ~CoWorker() {}
+    virtual void BlogUpdate() {
+        string data = m_Blog->GetData()->GetData();
+        cout << "CoWorker received \"" << data << "\"\n";
+    }
+};
+
+class Friend : public BlogObserver, public enable_shared_from_this<Friend> {
+    shared_ptr<MyBlog> m_Blog;
+public:
+    Friend(shared_ptr<MyBlog> blog) : m_Blog(blog) {}
+    virtual ~Friend() {}
+    virtual void BlogUpdate() {
+        string data = m_Blog->GetData()->GetData();
+        cout << "Friend received \"" << data << "\"\n";
+    }
+};
+
+int main(int argc, char** argv) {
+    auto blog = make_shared<MyBlog>();
+    auto boss = make_shared<Boss>(blog);
+    auto coWorker = make_shared<CoWorker>(blog);
+    auto myFriend = make_shared<Friend>(blog);
+    
+    blog->Subscribe(boss);
+    blog->Subscribe(coWorker);
+    
+    blog->SetData("My first blog");
+    
+    blog->Unsubscribe(boss);
+    blog->Subscribe(myFriend);
+    
+    blog->SetData("My second blog");
+    
+    blog->Unsubscribe(coWorker);
+    blog->SetData("My third blog");
+    
+    return 0;
+}
