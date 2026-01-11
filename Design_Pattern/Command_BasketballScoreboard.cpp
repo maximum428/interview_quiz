@@ -1,6 +1,17 @@
 /*
 The Command Pattern encapsulates a request as an object, thereby letting you parameterize other objects with different requests, 
 queue or log requests, and support undoable operations.
+
+一句白話版（先給結論）
+
+👉 把「要做什麼事」包成一個物件，讓你可以像操作資料一樣操作行為，
+因此可以：
+
+隨時替換不同的行為
+
+排隊或記錄操作
+
+支援 Undo / Redo
 */
 
 #include <iostream>
