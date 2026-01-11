@@ -121,3 +121,116 @@ int main() {
     Librarian librarian;
     librarian.DisplayBookCollection();
 }
+
+
+/*****************************************************************************************
+***************************** Smart Pointer Version *********************************
+******************************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <memory>
+
+using namespace std;
+using namespace std::string_literals;
+
+class BookComponent {
+public:
+    virtual ~BookComponent() = default;
+    virtual void Add(unique_ptr<BookComponent> newComponent) {}
+    virtual void Remove(BookComponent *newComponent) {}
+    virtual void DisplayInfo() = 0;
+};
+
+class Book : public BookComponent {
+    string m_title, m_author;
+public:
+    Book(string title, string author) : m_title(move(title)), m_author(move(author)) {}
+    virtual void DisplayInfo() override {
+        cout << "Book : " << m_title << " by " << m_author << endl;
+    }
+};
+
+class BookGroup : public BookComponent {
+    string m_groupName;
+    vector<unique_ptr<BookComponent>> m_bookComponents;
+public:
+    BookGroup(string groupName) : m_groupName(move(groupName)) {}
+    void Add(unique_ptr<BookComponent> newComponent) override {
+        m_bookComponents.push_back(move(newComponent));
+    }
+    void Remove(BookComponent *componentToRemove) override {
+        m_bookComponents.erase(
+            remove_if(
+                m_bookComponents.begin(),
+                m_bookComponents.end(),
+                [&](const unique_ptr<BookComponent>& ptr) {
+                    return ptr.get() == componentToRemove;
+                }),
+            m_bookComponents.end());
+    }
+    void DisplayInfo() {
+        static string spaces;
+        cout << "Group : " << m_groupName << endl;
+        spaces += "    "s;
+        
+        for (const auto& component : m_bookComponents) {
+            cout << spaces;
+            component->DisplayInfo();
+        }
+        spaces.resize(spaces.size() - 4);
+    }
+};
+
+class Librarian {
+    unique_ptr<BookComponent> m_BookCollection;
+    void BuildBookCollection() {
+        AddBookToGroup(m_BookCollection.get(), "Merrian-Webster's Collegiate Dictionary"s, "Merrian-Webster"s);
+        m_BookCollection->Add(BuildFictionGroup());
+        m_BookCollection->Add(BuildNonfictionGroup());
+    }
+    unique_ptr<BookComponent> BuildFictionGroup() {
+        auto fictionGroup = make_unique<BookGroup>("Fiction"s);
+        fictionGroup->Add(BuildKidsGroup());
+        return fictionGroup;
+    }
+    unique_ptr<BookComponent> BuildNonfictionGroup() {
+        auto nonfictionGroup = make_unique<BookGroup>("Nonfiction"s);
+        nonfictionGroup->Add(BuildBiographyGroup());
+        return nonfictionGroup;
+    }
+    unique_ptr<BookComponent> BuildKidsGroup() {
+        auto kidsGroup = make_unique<BookGroup>("Kids"s);
+        AddBookToGroup(kidsGroup.get(), "Green Eggs and Ham"s, "Dr. Suess"s);
+        kidsGroup->Add(BuildKidsAge3To5Group());
+        return kidsGroup;
+    }
+    unique_ptr<BookComponent> BuildKidsAge3To5Group() {
+        auto kidsAges3To5Group = make_unique<BookGroup>("Kids (Ages 3-5)"s);
+        AddBookToGroup(kidsAges3To5Group.get(), "Goodnight Moon"s, "Margaret Wise Brown"s);
+        return kidsAges3To5Group;
+    }
+    unique_ptr<BookComponent> BuildBiographyGroup() {
+        auto biographyGroup = make_unique<BookGroup>("Biography"s);
+        AddBookToGroup(biographyGroup.get(), "Steve Jobs", "Walter Isaacson"s);
+        return biographyGroup;
+    }
+    void AddBookToGroup(BookComponent *group, const string& title, const string& author) {
+        group->Add(make_unique<Book>(title, author));
+    }
+public:
+    Librarian() : m_BookCollection(make_unique<BookGroup>("Book Coolection"s)) {
+        BuildBookCollection();
+    }
+    void DisplayBookCollection() {
+        m_BookCollection->DisplayInfo();
+    }
+};
+
+int main(int argc, char** argv) {
+    Librarian librarian;
+    librarian.DisplayBookCollection();
+    
+    return 0;
+}
