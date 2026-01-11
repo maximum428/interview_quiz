@@ -1,6 +1,28 @@
 /*
 The Iterator Pattern provides a way to access the elements of an aggregate object sequentially without exposing 
 its underlying representation.
+
+先用白話講（直覺版）
+
+👉 Iterator Pattern 讓你「一個一個地」走訪集合裡的元素，
+而且不用知道這個集合內部到底是怎麼存資料的。
+
+你只需要知道：
+
+給我下一個
+我走完了沒？
+現在是誰？
+
+
+你不需要知道：
+
+是 vector 還是 array
+
+是 linked list 還是 tree
+
+index 怎麼算
+
+指標怎麼移
 */
 #include <iostream>
 #include <string>
@@ -194,6 +216,192 @@ int main(int argc, char** argv) {
     PrintLineup("Washington Nationals Lineup", washingtonNationalsLineupIterator);
     delete washingtonNationalsLineupIterator;
     delete washingtonNationalsLineup;
+    
+    return 0;
+    
+}
+
+
+/****************************************************************************************
+******************************** Smart Pointer Version **********************************
+*****************************************************************************************/
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+
+using namespace std;
+using namespace std::string_literals;
+
+#define MAX_SIZE_ARRAY 10
+
+template<class Item>
+class Iterator {
+public:
+    virtual ~Iterator() = default;
+    virtual void First() = 0;
+    virtual void Next() = 0;
+    virtual bool IsDone() const = 0;
+    virtual Item CurrentItem() const = 0;
+};
+
+template<class Item>
+class List {
+public:
+    virtual ~List() = default;
+    virtual unique_ptr<Iterator<Item>> CreateIterator() const = 0;
+    virtual unsigned int Count() const             = 0;
+    virtual void Append(Item item)                 = 0;
+};
+
+template<class Item>
+class StdVectorListIterator;
+
+template<class Item>
+class StdVectorList : public List<Item> {
+    vector<Item> m_vector;
+public:
+    unique_ptr<Iterator<Item>> CreateIterator() const override {
+        return make_unique<StdVectorListIterator<Item>>(this);
+    }
+    unsigned int Count() const override {
+        return m_vector.size();
+    }
+    void Append(Item item) override {
+        m_vector.push_back(item);
+    }
+    const Item& Get(unsigned int index) const {
+        return m_vector.at(index);
+    }
+};
+
+template<class Item>
+class StdVectorListIterator : public Iterator<Item> {
+    unsigned int m_index{0};
+    const StdVectorList<Item> *m_List;
+public:
+    StdVectorListIterator(const StdVectorList<Item> *list) : m_List(list) {}
+    void First() override { m_index = 0; }
+    void Next() override { m_index++; }
+    bool IsDone() const override {
+        return (m_List->Count() <= m_index);
+    }
+    Item CurrentItem() const override {
+        return IsDone() ? Item() : m_List->Get(m_index);
+    }
+};
+
+template<class item>
+class ArrayList;
+
+template<class Item>
+class ArrayListIterator : public Iterator<Item> {
+    const ArrayList<Item> *m_List;
+    unsigned int m_index{0};
+public:
+    ArrayListIterator(const ArrayList<Item> *list) : m_List(list) {}
+    void First() override { m_index = 0; }
+    void Next() override { m_index++; }
+    bool IsDone() const override {
+        return (m_List->Count() <= m_index);
+    }
+    Item CurrentItem() const override {
+        return IsDone() ? Item() : m_List->Get(m_index);
+    }
+};
+
+template<class Item>
+class ArrayList : public List<Item> {
+    Item m_array[MAX_SIZE_ARRAY];
+    unsigned int m_currentSize{0};
+public:
+    unique_ptr<Iterator<Item>> CreateIterator() const override {
+        return make_unique<ArrayListIterator<Item>>(this);
+    }
+    unsigned int Count() const override {
+        return m_currentSize;
+    }
+    void Append(Item item) override {
+        if (m_currentSize < MAX_SIZE_ARRAY) {
+            m_array[m_currentSize++] = item;
+        }
+    }
+    const Item& Get(unsigned int index) const {
+        return m_array[index];
+    }
+};
+
+class BaseballPlayer {
+    string m_name, m_position;
+    char m_swingType;
+public:
+    BaseballPlayer(string name, string position, char swingType) : m_name(name), m_position(position), m_swingType(swingType) {}
+    BaseballPlayer() : m_swingType('\0') {}
+    virtual ~BaseballPlayer() {}
+    string GetName() const {
+        return m_name;
+    }
+    string GetPosition() const {
+        return m_position;
+    }
+    char GetSwingType() const {
+        return m_swingType;
+    }
+};
+
+std::ostream& operator<<(std::ostream& outc, const BaseballPlayer& player) {
+    string tabsAfterName = (player.GetName().size() >= 16) ? "\t"s : "\t\t"s;
+    outc << player.GetPosition() << "\t"
+         << player.GetName() << tabsAfterName
+         << player.GetSwingType();
+    return outc;
+}
+
+List<BaseballPlayer> *MakeNewYorkmetsLineup() {
+    List<BaseballPlayer> *NewYorkMetsLineup = new StdVectorList<BaseballPlayer>();
+    NewYorkMetsLineup->Append(BaseballPlayer("Curtis Granderson", "CF", 'L'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Asdrubal Cabrera", "SS", 'S'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Yoenis Cespedes", "LF", 'R'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Jay Bruce", "RF", 'L'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Neil Walker", "2B", 'S'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Lucas Duda", "1B", 'L'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Travis d'Arnaud", "C", 'R'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Jose Reyes", "SS", 'S'));
+    NewYorkMetsLineup->Append(BaseballPlayer("Noah Syndergaard", "P", 'L'));
+    return NewYorkMetsLineup;
+}
+
+List<BaseballPlayer> *MakeWashingtonnationalsLineup() {
+    List<BaseballPlayer> *WashingtonNationalsLineup = new ArrayList<BaseballPlayer>();
+    WashingtonNationalsLineup->Append(BaseballPlayer("Adam Eaton", "F", 'L'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Wilmer Difo", "SS", 'R'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Daniel Murphy", "2B", 'L'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Bryce Harper", "RF", 'L'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Ryan Zimmerman", "1B", 'L'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Anthony Rendon", "3B", 'R'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Matt Wieters", "C", 'R'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Michael Taylor", "CF", 'R'));
+    WashingtonNationalsLineup->Append(BaseballPlayer("Stephen Strasburg", "P", 'S'));
+    return WashingtonNationalsLineup;
+}
+
+void PrintLineup(const string& lineupName, unique_ptr<Iterator<BaseballPlayer>> iterator) {
+    cout << lineupName << "\n";
+    unsigned int lineupPosition = 1;
+    
+    for (iterator->First(); !iterator->IsDone(); iterator->Next()) {
+        cout << lineupPosition++ << ". " << iterator->CurrentItem() << "\n";
+    }
+    cout << "\n";
+}
+
+int main(int argc, char** argv) {
+    auto newYorkMetsLineup = MakeNewYorkmetsLineup();
+    PrintLineup("New York Mets Lineup", newYorkMetsLineup->CreateIterator());
+    
+    auto washingtonNationalsLineup = MakeWashingtonnationalsLineup();
+    PrintLineup("Washington Nationals Lineup", washingtonNationalsLineup->CreateIterator());
     
     return 0;
     
