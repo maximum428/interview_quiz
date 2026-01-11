@@ -1,5 +1,17 @@
 /*
 The State Pattern allows an object to alter its behavior when its internal state changes. The object will appear to change its class.
+
+State Pattern 的重點是：一個物件的行為 不是固定的，而是依照它的「內部狀態」決定。
+
+也就是說，同一個物件在不同狀態下，對相同方法呼叫會有不同的反應。
+
+總結：
+
+State Pattern = 行為依狀態變化的策略封裝。
+
+它解耦了物件的行為和狀態，使物件可以「動態改變行為」。
+
+從外部看，物件好像「變了類別」，但其實只是內部狀態在切換而已。
 */
 #include <iostream>
 #include <string>
