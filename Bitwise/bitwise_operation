@@ -188,3 +188,19 @@ bool slidingWindow(string s1, string s2) {
 3️⃣ 視窗太大，左邊出去
 4️⃣ 出的是需要的，need++
 ======================================================================
+
+C++ 中的 Min Heap（面試一定會寫）
+C++ 預設是 max heap，要這樣寫：
+
+priority_queue<int, vector<int>, greater<int>> minHeap;
+
+minHeap.push(3);
+minHeap.push(1);
+minHeap.push(2);
+
+cout << minHeap.top();  // 1
+------------------------------------------------------------------------
+// min heap
+auto cmp = [](ListNode* a, ListNode* b) { return a->val > b->val; };
+
+priority_queue<ListNode*, vector<ListNode*> decltype(cmp)> minHeap(cmp);
