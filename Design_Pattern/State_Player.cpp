@@ -131,6 +131,7 @@ int main() {
 
 #include <iostream>
 #include <string>
+#include <memory>
 
 using namespace std;
 
@@ -160,15 +161,14 @@ public:
 
 // ================= MusicPlayer =================
 class MusicPlayer {
+private:
+    unique_ptr<MusicPlayerState> m_State;
+
 public:
     enum State { ST_STOPPED, ST_PLAYING, ST_PAUSED };
 
-private:
-    MusicPlayerState *m_State;
-
-public:
     MusicPlayer();
-    ~MusicPlayer();
+    virtual ~MusicPlayer() {}
 
     void Play()  { m_State->Play(this); }
     void Pause() { m_State->Pause(this); }
@@ -211,19 +211,13 @@ public:
 // ================= MusicPlayer Impl =================
 MusicPlayer::MusicPlayer() : m_State(new StoppedState()) {}
 
-MusicPlayer::~MusicPlayer() {
-    delete m_State;
-}
-
 void MusicPlayer::SetState(State state) {
     cout << "changing from " << m_State->GetName() << " to ";
 
-    delete m_State;
-
     switch (state) {
-        case ST_STOPPED: m_State = new StoppedState(); break;
-        case ST_PLAYING: m_State = new PlayingState(); break;
-        case ST_PAUSED:  m_State = new PausedState();  break;
+        case ST_STOPPED: m_State = make_unique<StoppedState>(); break;
+        case ST_PLAYING: m_State = make_unique<PlayingState>(); break;
+        case ST_PAUSED:  m_State = make_unique<PausedState>();  break;
     }
 
     cout << m_State->GetName() << " state\n";
