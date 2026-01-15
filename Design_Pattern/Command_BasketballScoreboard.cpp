@@ -12,6 +12,28 @@ queue or log requests, and support undoable operations.
 排隊或記錄操作
 
 支援 Undo / Redo
+
+最經典 UML 結構（考試用）
+        +------------+
+        |  Command   | <--- interface
+        +------------+
+        | execute()  |
+        | undo()     |
+        +------------+
+              ^
+              |
+   +----------------------+
+   | ConcreteCommand      |
+   +----------------------+
+   | receiver             |
+   | execute()            |
+   | undo()               |
+   +----------------------+
+              |
+              v
+          Receiver
+
+Invoker ----> Command
 */
 
 #include <iostream>
