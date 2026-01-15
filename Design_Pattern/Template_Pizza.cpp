@@ -9,6 +9,23 @@ Template Method Pattern 是：
 父類別先把「做事情的流程」寫好，但把某些步驟留給子類別自己實作。
 
 流程不變，細節可變。
+
+核心結構總圖（一定要會畫）
+        AbstractClass
+        ┌─────────────────────────┐
+        │ templateMethod()  ★     │  ← 演算法骨架
+        │─────────────────────────│
+        │ step1()   (implemented) │
+        │ step2()   (abstract)    │  ← 子類實作
+        │ step3()   (abstract)    │
+        │ hook()    (optional)    │
+        └───────────┬─────────────┘
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+   ConcreteClassA         ConcreteClassB
+   ─ step2() A            ─ step2() B
+   ─ step3() A            ─ step3() B
 */
 #include <iostream>
 
