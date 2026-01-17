@@ -192,7 +192,27 @@ bool slidingWindow(string s1, string s2) {
 C++ 中的 Min Heap（面試一定會寫）
 C++ 預設是 max heap，要這樣寫：
 
-priority_queue<int, vector<int>, greater<int>> minHeap;
+/*
+Min Heap 是一個 完全二叉樹，每個節點都 ≤ 它的子節點
+👉 所以 根節點永遠是最小值
+
+特性：
+
+完全二叉樹（tree 完全填滿，最後一層從左到右填）
+
+父節點 ≤ 左右子節點
+
+插入 / 刪除最小值 = O(log n)
+
+      1
+     / \
+    2   5
+   /
+  3
+*/
+
+priority_queue<int, vector<int>, greater<int>> minHeap;  // Min heap
+// NOTE:  priority_queue<int> maxHeap;  // Max heap
 
 minHeap.push(3);
 minHeap.push(1);
