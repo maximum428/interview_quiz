@@ -1,3 +1,39 @@
+/*
+            ┌──────────────────────────────┐
+            │       <<interface>>          │
+            │       PlayStrategy           │
+            ├──────────────────────────────┤
+            │ + isValid(cards) : bool      │
+            │ + canBeat(curr,last) : bool  │
+            │ + name() : string            │
+            └─────────────┬────────────────┘
+                          │
+         ┌────────────────┴─────────────┐
+         │                              │
+┌──────────────────────┐       ┌──────────────────────┐
+│   SingleStrategy     │       │     PairStrategy      │
+├──────────────────────┤       ├──────────────────────┤
+│ + isValid(...)       │       │ + isValid(...)       │
+│ + canBeat(...)       │       │ + canBeat(...)       │
+│ + name()             │       │ + name()             │
+└──────────────────────┘       └──────────────────────┘
+
+          ▲
+          │ composed in
+          │
+┌──────────────────────────────┐
+│        BigTwoGame            │
+├──────────────────────────────┤
+│ - m_strategy : PlayStrategy* │
+│ - m_players  : vector<Player>│
+│ - m_lastPlay : vector<Card>  │
+├──────────────────────────────┤
+│ + addPlayer(p: Player)       │
+│ + setStrategy(strategy)      │
+│ + play(playerIdx, cards)     │
+└──────────────────────────────┘
+*/
+
 #include <iostream>
 
 using namespace std;
