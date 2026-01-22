@@ -1,0 +1,124 @@
+nterview Problem Description (English)
+
+This is a scheduling problem with dependency and priority constraints.
+
+We have one bus with multiple stops, and the bus must visit all stops in an order that satisfies certain precedence rules. Some stops must be visited before others.
+
+These constraints can be modeled as a directed graph:
+
+Each node represents a bus stop
+
+A directed edge A → B means stop A must be visited before stop B
+
+In addition to dependencies, each stop has a priority value:
+
+A smaller number means higher priority
+
+When multiple stops are available to visit at the same time, the stop with the highest priority must be chosen first
+
+Input
+
+Dependency relationships (adjacency list)
+
+A → [B, C]
+B → [D]
+C → [B]
+
+
+This means:
+
+Stop A must come before stops B and C
+
+Stop C must come before stop B
+
+Stop B must come before stop D
+
+Priority map
+
+A: 1
+B: 2
+C: 3
+D: 4
+
+
+Priority 1 is the highest, 4 is the lowest.
+
+Output Requirement
+
+Return a valid order of stops such that:
+
+All dependency constraints are satisfied
+
+When multiple stops have no unmet dependencies, choose the one with the highest priority
+
+Example Output
+[A, C, B, D]
+
+Key Insight (What the interviewer is testing)
+
+This is a variation of Topological Sorting with an added priority-based selection rule.
+Instead of choosing any node with zero in-degree, we choose the one with the highest priority.
+
+One-Sentence Summary (Very Interview-Friendly)
+
+Given a directed graph of stop dependencies and a priority assigned to each stop, return a valid topological order that always selects the highest-priority available stop.
+
+================================================================
+這是一個 有順序與優先權限制的排程問題。
+
+我們有 一台公車（bus），公車會依序停靠多個 站點（stops）。
+每個站點之間存在 先後順序限制，也就是某些站點必須在其他站點之前停靠。
+
+這些限制可以視為一個 有向圖（directed graph）：
+
+節點（node）代表公車站
+
+邊（edge）代表「必須先到」的關係
+
+此外，每個站點還有一個 priority（優先順序）：
+
+數字越小，優先權越高
+
+當多個站點「同時可以被停靠」時，必須選擇 priority 最高的站
+
+輸入說明
+
+站點的先後關係
+
+A → B
+A → C
+C → B
+B → D
+
+
+用 adjacency list 表示為：
+
+A: [B, C]
+B: [D]
+C: [B]
+
+
+站點優先權
+
+A: 1
+B: 2
+C: 3
+D: 4
+
+輸出要求
+
+請輸出一個 合法的停靠順序，需滿足：
+
+所有先後關係都被遵守
+
+當有多個站點可選時，選擇 **priority 較高（數字較小）**的站點
+
+範例輸出
+[A, C, B, D]
+
+面試官期待的關鍵點（加分）
+
+你可以補一句：
+
+這是一題 拓撲排序（Topological Sort） 的變形題，
+因為在排序的過程中還需要根據 priority 來決定執行順序。
