@@ -5,72 +5,81 @@
 
 using namespace std;
 
-int main() {
-    // Graph
-    unordered_map<char, vector<char>> graph = {
-        {'A', {'B', 'C'}},
-        {'B', {'D'}},
-        {'C', {'B'}}
-    };
-
-    // Priority (lower = higher priority)
-    unordered_map<char, int> priority = {
-        {'A', 1},
-        {'B', 2},
-        {'C', 3},
-        {'D', 4}
-    };
-
-    // Step 1: compute indegree
+vector<char> findStopOrder(unordered_map<char, vector<char>>& graph, unordered_map<char, int>& priority) {
     unordered_map<char, int> indegree;
-    for (auto &p : priority) {
-        indegree[p.first] = 0;
+    
+    // Initialize indegree for all nodes
+    for (auto& [u, _] : graph) {
+        indegree[u] = 0;
     }
-
-    for (auto &p : graph) {
-        for (char nei : p.second) {
-            indegree[nei]++;
+    
+    // Compute indegree
+    for (auto& [u, neighbors] : graph) {
+        for (auto& v : neighbors) {
+            indegree[v]++;
         }
     }
-
-    // Step 2: min-heap by priority
-    auto cmp = [&](char a, char b) {
-        return priority[a] > priority[b];  // min-heap
+    
+    // Min-heap based on priority
+    auto cmp = [&](const char a, const char b) {
+        return priority[a] > priority[b];  // smaller number = higher priority
     };
     priority_queue<char, vector<char>, decltype(cmp)> pq(cmp);
-
-    // Step 3: push indegree == 0
-    for (auto &p : indegree) {
-        if (p.second == 0) {
-            pq.push(p.first);
+    
+    // Push all nodes with indegree 0
+    for (auto& [node, deg] : indegree) {
+        if (deg == 0) {
+            pq.push(node);
         }
     }
-
-    // Step 4: topological sort
-    vector<char> result;
-
+    
+    vector<char> res;
+    
     while (!pq.empty()) {
-        char cur = pq.top();
+        char curr = pq.top();
         pq.pop();
-        result.push_back(cur);
-
-        for (char nei : graph[cur]) {
-            if (--indegree[nei] == 0) {
-                pq.push(nei);
+        res.push_back(curr);
+        
+        for (auto& next : graph[curr]) {
+            indegree[next]--;
+            if (indegree[next] == 0) {
+                pq.push(next);
             }
         }
     }
-
-    // Output
-    cout << "Stop order: ";
-    for (char c : result) {
-        cout << c << " ";
+    
+    // Cycle detection
+    if (res.size() != indegree.size()) {
+        throw runtime_error("Cycle detected : no valid ordering exists");
     }
-    cout << endl;
-
-    return 0;
+    return res;
 }
 
+int main() {
+    unordered_map<char, vector<char>> graph = {
+        {'a', {'b', 'c'}},
+        {'b', {'d'}},
+        {'c', {'b'}},
+        {'d', {}}
+    };
+    
+    unordered_map<char, int> priority = {
+        {'a', 1},
+        {'b', 2},
+        {'c', 3},
+        {'d', 4}
+    };
+    
+    try {
+        vector<char> order = findStopOrder(graph, priority);
+        for (auto& stop : order) {
+            cout << stop << " ";
+        }
+    } catch (const exception& e) {
+        cout << e.what() << endl;
+    }
+    return 0;
+}
 
 
 
