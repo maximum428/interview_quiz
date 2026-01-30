@@ -264,6 +264,108 @@ int main(void) {
     }
 }
 
+/***********************************************************************/
+/***  Example:  1. Use non-volatile FRAM. 2. Use double-buffering 
+                3. Detect power failure.  4. Make writes atomic ***/
+
+#include <cstring>
+#include <cstdint>
+#include <iostream> 
+
+// Simulated FRAM storage
+uint8_t FRAM[2][64];  // double buffer
+bool power_lost = false;
+
+// Critical data struct
+struct CriticalData {
+    uint32_t counter;
+    uint16_t temperature;
+    uint16_t checksum;  // simple checksum for integrity
+};
+
+// Compute simple checksum
+uint16_t compute_checksum(const CriticalData &data) {
+    return data.counter ^ data.temperature;
+}
+
+// Write data to FRAM double buffer atomically
+void write_fram_atomic(int buf_index, const CriticalData &data) {
+    CriticalData tmp = data;
+    tmp.checksum = compute_checksum(data);
+    std::memcpy(FRAM[buf_index], &tmp, sizeof(tmp));
+}
+
+// Read data from FRAM and validate checksum
+bool read_fram(int buf_index, CriticalData &data) {
+    std::memcpy(&data, FRAM[buf_index], sizeof(data));
+    return data.checksum == compute_checksum(data);
+}
+
+// Presistent storage manager
+class PersistentManager {
+    int active_buf = 0;  // toggle between 0 and 1
+public:
+    CriticalData current_data;
+    
+    PersistentManager() {
+        // On boot, restore latest valid data
+        CriticalData d0, d1;
+        bool valid0 = read_fram(0, d0);
+        bool valid1 = read_fram(1, d1);
+        
+        if (valid1 && (!valid0 || d1.counter >= d0.counter)) {
+            current_data = d1;
+            active_buf = 1;
+        } else if (valid0) {
+            current_data = d0;
+            active_buf = 0;
+        } else {
+            current_data = {0, 0, 0}; // first boot
+        }
+    }
+    
+    // Flush data to FRAM
+    void flush() {
+        active_buf = 1 - active_buf; // toggle buffer
+        write_fram_atomic(active_buf, current_data);
+    }
+    
+    void increment_counter() {
+        current_data.counter++;
+    }
+    
+    void set_temperature(uint16_t temp) {
+        current_data.temperature = temp;
+    }
+};
+
+// Simulated power fial interrupt
+void POWER_FAIL_ISR(PersistentManager &pm) {
+    pm.flush();  // flush immediately
+}
+
+int main() {
+    PersistentManager pm;
+    
+    // Normal operation
+    for (int i = 0; i < 5; i++) {
+        pm.increment_counter();
+        pm.set_temperature(25 +i);
+        
+        // Simulate power fail at iteration 3
+        if (i == 3) {
+            std::cout << "Power fail detected! Flushing data...\n";
+            POWER_FAIL_ISR(pm);
+        }
+    }
+    
+    // Simulate reboot
+    PersistentManager pm_reboot;
+    std::cout << "Recovered counter: " << pm_reboot.current_data.counter << "\n";
+    std::cout << "Recovered temperature: " << pm_reboot.current_data.temperature << "\n";
+    
+    return 0;
+}
 
 /***********************************************************************/
 /***   Ring buffer  ***/
