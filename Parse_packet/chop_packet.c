@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+typedef enum { ENDIAN_BIG, ENDIAN_LITTLE } endian_t;
+
 typedef struct {
     uint8_t msg_id; /* 2-bit */
     uint8_t seq_num;  /* 4-bit */
@@ -32,6 +34,27 @@ void process_packet2(uint16_t packet) {
     
 }
 
+void process_packet(uint32_t packet, endian_t endian) {
+    message_t msg;
+    if (endian == ENDIAN_BIG) { 
+        msg.msg_id      = (packet >> 24) & 0xFF;
+        msg.seq_num     = (packet >> 16) & 0xFF;
+        msg.fname_seq   = (packet >> 8) & 0xFF;
+        msg.errcode     = packet & 0xFF;
+    } else {
+        // little endian
+        msg.msg_id      = packet & 0xFF;
+        msg.seq_num     = (packet >> 8) & 0xFF;
+        msg.fname_seq   = (packet >> 16) & 0xFF;
+        msg.errcode     = (packet >> 24) & 0xFF;
+    }
+    
+    printf("msg_id: %u\n", msg.msg_id);
+    printf("seq_num: %u\n", msg.seq_num);
+    printf("fname_seq: %u\n", msg.fname_seq);
+    printf("errcode: %u\n", msg.errcode);
+}
+
 
 // for big endian
 void process_packet(uint16_t packet) {
@@ -49,7 +72,7 @@ void process_packet(uint16_t packet) {
     //if (msg.dkk)
 }
 
-uint16_t test_case1[] = {0x50E5, 0x8CB3};
+uint16_t test_case1[] = {0x0050E500, 0x8CB3};
     
     
     //0x50E5 /*0101.  000011.   1001      01*/, 
@@ -58,12 +81,12 @@ uint16_t test_case1[] = {0x50E5, 0x8CB3};
 
 int main() {
     for (int i = 0; i < 2; i++) {
-        process_packet2(test_case1[i]);
+        process_packet2(test_case1[i], ENDIAN_BIG);
     }
     return 0;
 }
 
-//bit endian
+//big endian
 /*00 0000. 000000  0000
 1000110010110011
 1000110010110011
