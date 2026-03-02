@@ -437,5 +437,116 @@ int main(void) {
     return 0;
 }
 
+/*************  C++ Version ****************/
+#include <iostream>
+#include <cstdint>
+#include <stdexcept>
+#include <utility>
+
+using namespace std;
+
+#define RING_BUFFER_SIZE 8
+
+class RingBuffer {
+private:
+    size_t head = 0;
+    size_t tail = 0;
+    uint8_t *buffer = nullptr;  //[RING_BUFFER_SIZE];
+    size_t capacity = 0;
+public:
+    RingBuffer() : head(0), tail(0), buffer(nullptr), capacity(RING_BUFFER_SIZE) {
+        /*if ((buffer = (uint8_t*)malloc(capacity)) != 0) {
+            throw runtime_error("malloc failed");
+        }*/
+        buffer = new uint8_t[capacity];
+    }
+    explicit RingBuffer(size_t cap) : head(0), tail(0), buffer(nullptr), capacity(cap) {
+        if (capacity < 2) throw invalid_argument("capacity must be >= 2");
+        
+        buffer = new uint8_t[capacity];
+    }
+    
+    RingBuffer(const RingBuffer&) = delete;
+    RingBuffer& operator=(const RingBuffer&) = delete;
+    
+    RingBuffer(RingBuffer&& other) noexcept : head(other.head), tail(other.tail), buffer(other.buffer), capacity(other.capacity) {
+        other.buffer = nullptr;
+        other.capacity = 0;
+        other.head = other.tail = 0;
+    }
+    RingBuffer& operator=(RingBuffer&& other) noexcept {
+        if (this == &other) return *this;
+        delete[] buffer;
+        
+        head = other.head;
+        tail = other.tail;
+        buffer = other.buffer;
+        capacity = other.capacity;
+        
+        other.buffer = nullptr;
+        other.capacity = 0;
+        other.head = other.tail = 0;
+        return *this;
+    }
+    virtual ~RingBuffer() {
+        delete[] buffer;
+        buffer = nullptr;
+    }
+    
+    bool is_full() const {
+        if (capacity == 0) return true;
+        return ((head + 1) % capacity) == tail; 
+    }
+    bool is_empty() const {
+        if (capacity == 0) return true;
+        return head == tail;
+    }
+    void set_capacity(size_t cap) {
+        if (cap < 2) throw invalid_argument("capacity must be >= 2");
+        
+        uint8_t* newBuff = new uint8_t[cap];
+        delete[] buffer;
+        buffer = newBuff;
+        capacity = cap;
+        head = tail = 0;
+    }
+    
+    bool write(uint8_t data) {
+        if (is_full()) return false;
+        
+        buffer[head] = data;
+        head = (head + 1) % capacity;
+        return true;
+    }
+    bool read(uint8_t &data) {
+        if (is_empty()) return false;
+        
+        data = buffer[tail];
+        tail = (tail + 1) % capacity;
+        return true;
+    }
+};
+
+int main() {
+    RingBuffer rb;
+    cout << rb.is_full() << endl;
+    cout << rb.is_empty() << endl;
+    
+    rb.set_capacity(16);
+    cout << rb.is_empty() << endl;
+    
+    rb.write(10);
+    rb.write(20);
+    rb.write(30);
+    
+    uint8_t value;
+    while (rb.read(value)) {
+        cout << "Value: " << static_cast<int>(value) << endl;
+    }
+    return 0;
+}
+
+
+
 
 
