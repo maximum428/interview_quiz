@@ -146,7 +146,7 @@ int main() {
 
 bool safe_write(const char* path, const char* data, size_t len) {
     char tmp[256];
-    snprintf(tmp, sizeof(tmp, "%s.tmp", path));
+    snprintf(tmp, sizeof(tmp), "%s.tmp", path);
     
     // 1. Create temp file
     int fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
