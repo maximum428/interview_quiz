@@ -143,6 +143,7 @@ int main() {
 #include <string.h>
 #include <sys/stat.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 bool safe_write(const char* path, const char* data, size_t len) {
     char tmp[256];
