@@ -557,6 +557,7 @@ int main() {
 #include <functional>
 
 using namespace std;
+using namespace std::placeholders;
 
 int add(int a, int b) {
   return a + b;
@@ -571,8 +572,11 @@ int main() {
   cout << "Result of addiont: " << operation(5, 3) << endl;
 
   cout << callbackFunc(5, 3) << endl;
-  callbackFunc = [](int a, int b) -> int { return a + b; };
+  callbackFunc = [](int a, int b) -> int { return a - b; };
   cout << callbackFunc(6, 4) << endl;
+
+  auto f = bind(callbackFunc, _1, 10);
+  cout << f(20) << endl;
 
   return 0;
 }
