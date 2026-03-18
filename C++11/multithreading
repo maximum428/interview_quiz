@@ -580,3 +580,81 @@ int main() {
 
   return 0;
 }
+
+/****************************  variadic template ***************************/
+#include <iostream>
+#include <type_traits>
+#include <vector>
+#include <utility>
+#include <string>
+
+using namespace std;
+
+// base case
+void print() {
+  cout << std::endl;
+}
+
+// recursive case
+template<typename T, typename... Args>
+void print(T first, Args... args) {
+  cout << first << " ";
+  print(args...);
+}
+
+// base case
+int sum() {
+  return 0;
+}
+
+template<typename T, typename... Args>
+T sum(T first, Args... args) {
+  return first + sum(args...);
+}
+
+// C++17 version: Fold Expression
+template<typename... Args>
+auto sum_17(Args... args) {
+  return (args + ...);  // fold expression
+}
+
+template<typename T>
+string convertToString(const T& v) {
+   using U = decay_t<T>;  // T 可能帶 reference / const，判斷型別前最好先 decay
+
+   if constexpr (std::is_floating_point_v<U>) { // flat type
+      return "f: " + std::to_string(v);
+   } else if constexpr (std::is_same_v<U, bool>) { // boolean type
+      return v ? "true" : "false";
+   } else if constexpr (std::is_integral_v<U> && !std::is_same_v<U, bool> && !std::is_same_v<U, char>) {
+      return "i: " + std::to_string(v);   // integer type
+   } else if constexpr (std::is_same_v<U, char>) { // char type
+      return string("\"") + v + "\"";
+   } else if constexpr (std::is_same_v<U, std::string>) { // std::string
+      return "\"" + v + "\"";
+   } else if constexpr (std::is_convertible_v<U, const char*>) { // C-string
+      return string("\"") + v + "\"";
+   }
+   return "Unknown";
+}
+// Perfect Forwarding
+template<typename... Args>
+void wrapper(Args&&... args) {
+  vector<string> strArgs;
+  (strArgs.push_back(convertToString(std::forward<Args>(args))), ...);
+
+  for (const auto& s : strArgs) {
+    cout << s << endl;
+  }
+}
+
+int main() {
+  print(1, 25, "hello", 'A');
+
+  cout << sum(1, 2, 3, 4) << endl; // 10
+
+  // C++17: Fold Expression
+  cout << sum_17(1, 2, 3, 4) << endl; // 10
+
+  wrapper(true, "string", 3.14f, 4);
+}
