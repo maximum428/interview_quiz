@@ -55,6 +55,17 @@ res = num & mask;
 res = (((1 << len) - 1) & (n >> (pos - 1)));
 
 
+// 建立「前 k 個 bit 都是 1」的 mask ⭐
+int mask = (1 << k) - 1;
+
+//建立區間 mask（bit range）
+
+//👉 讓 [l, r] 都是 1
+
+int mask = ((1 << (r - l + 1)) - 1) << l;
+
+
+
 #define MAX(x, y) x ^ ((x^y) & -(x < y))
 #define MIN(x, y) y ^ ((x^y) & -(x < y))
 
