@@ -70,6 +70,12 @@ res = num & mask;
 res = (((1 << len) - 1) & (n >> (pos - 1)));
 
 
+/* 常見錯誤（面試很愛考）
+❌ overflow
+1 << 31   // signed → UB
+
+👉 正確：
+1U << 31 */
 
 #define MAX(x, y) x ^ ((x^y) & -(x < y))
 #define MIN(x, y) y ^ ((x^y) & -(x < y))
