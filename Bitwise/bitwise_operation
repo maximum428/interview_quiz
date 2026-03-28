@@ -13,10 +13,25 @@ num ^= 1UL << pos;
 // 4. Check bit
 bit = (num >> pos) & 1UL;
 
-// 5. Change nth bit to x:
+// 5. 建立「前 k 個 bit 都是 1」的 mask ⭐
+int mask = (1 << k) - 1;
+ex.
+k = 4
+1 << 4 = 10000
+-1     = 01111
+
+// 6. 建立區間 mask（bit range）
+//👉 讓 [l, r] 都是 1
+int mask = ((1 << (r - l + 1)) - 1) << l;
+ex.
+l = 2, r = 4
+(1 << 3) - 1 = 00000111
+<< 2         = 00011100
+
+// 7. Change nth bit to x:
 num ^= (-x ^ num) & (1 << n);
 
-// 6. Extract last bit
+// 8. Extract last bit
 bit = num & -num;
 let bit = num & num.wrappint_neg();  // For Rust
 or
@@ -25,27 +40,27 @@ let bit = num & !(num - 1);  // For Rust
 
 //Note:   -num is equal to ~(num - 1)
 
-// 7. Remove last bit
+// 9. Remove last bit
 num &= (num - 1)
 
-// 8. Find posiiton of rightmost set(1) bit:
+// 10. Find posiiton of rightmost set(1) bit:
 int pos = log2(num & -num);
 let pos = (num & num.wrapping_neg()).trailing_zeros() as usize;  // For Rust
 
-// 9. Swap bits
+// 11. Swap bits
 int bit1 = (num >> pos1) & 1UL;
 int bit2 = (num >> pos2) & 1UL;
 int x = (bit1 ^ bit2);
 num ^= ((x << pos1) | (x << pos2))
 
-// 10. reverse bits
+// 12. reverse bits
 int res = 0;
 for (int i = 0; i < 32; i++, n >>= 1) {
     res <<= 1;
     res |= n & 1;
 }
 
-// 11. chop bits
+// 13. chop bits
 int32_t res;
 int32_t mask = -1;   //. 1111 1111
 mask = ~(mask << len);    // 0000. 0011.  ex len = 2
@@ -53,16 +68,6 @@ num >>= pos;
 res = num & mask;
 // or
 res = (((1 << len) - 1) & (n >> (pos - 1)));
-
-
-// 建立「前 k 個 bit 都是 1」的 mask ⭐
-int mask = (1 << k) - 1;
-
-//建立區間 mask（bit range）
-
-//👉 讓 [l, r] 都是 1
-
-int mask = ((1 << (r - l + 1)) - 1) << l;
 
 
 
