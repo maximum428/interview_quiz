@@ -69,6 +69,10 @@ res = num & mask;
 // or
 res = (((1 << len) - 1) & (n >> (pos - 1)));
 
+// 14. Find number of bits
+int x = log2(num) + 1;   // ex.  num = 20 = 0001 0100, x = 5 (remove leading zero, and get the number of bits from leftmost bit of value 1)
+                         //      num = 35 = 0010 0100, x = 6 (remove leading zero, and get the number of bist from leftmost bit of value 1)
+
 
 /* 常見錯誤（面試很愛考）
 ❌ overflow
