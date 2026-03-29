@@ -80,8 +80,8 @@ res = (((1 << len) - 1) & (n >> (pos - 1)));
 #define MAX(x, y) x ^ ((x^y) & -(x < y))
 #define MIN(x, y) y ^ ((x^y) & -(x < y))
 // or
-#define MAX(x, y) x - ((x - y) & ((x - y) >> 31))
-#define MIN(x, y) y + ((x - y) & ((x - y) >> 31))
+#define MAX(x, y) x - ((x - y) & ((x - y) >> (sizeof(int) * 8 - 1))  // for 32-bit: sizeof(int) * 8 - 1 = 31
+#define MIN(x, y) y + ((x - y) & ((x - y) >> 31))                    // for 32-bit: sizeof(int) * 8 - 1 = 31
 
 
 5:   0000 0101
