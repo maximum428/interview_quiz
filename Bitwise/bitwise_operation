@@ -80,6 +80,7 @@ res = (((1 << len) - 1) & (n >> (pos - 1)));
 #define MAX(x, y) x ^ ((x^y) & -(x < y))
 #define MIN(x, y) y ^ ((x^y) & -(x < y))
 // or
+#define MAX(x, y) x - ((x - y) & ((x - y) >> 31))
 #define MIN(x, y) y + ((x - y) & ((x - y) >> 31))
 
 
