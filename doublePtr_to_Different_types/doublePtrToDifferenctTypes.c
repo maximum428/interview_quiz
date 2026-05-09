@@ -55,3 +55,42 @@ int main(void) {
     doublePtrToDifferentTypes();
     return 0;
 }
+/********************************************************/
+/* Pointer expressions: ptr++,*ptr++, ++*ptr and *++ptr */
+
+#include <stdio.h>
+
+int main(void) {
+  char *ptr = "alex chang";
+  printf("%p\n", (void*)ptr);
+  printf("%c\n", *ptr);
+  printf("%c\n", *ptr++);
+  printf("%c\n", *ptr);
+  printf("%p\n", (void*)ptr);
+  printf("%p\n", ptr+1);
+  printf("%p\n", ptr++);
+  printf("%p\n", (void*)ptr);
+  printf("%c\n", *ptr);
+  //printf("%d\n", ++*ptr);  
+  /* Error: can be undefined behavior (Segment fault, bus error or crash) because In C, 
+     string literals are usually stored in read-only memory which attempts to modify the first character of the string literal from 'e' to 'f'.  
+     You can use Use a writable char array (char ptr[] = "alex chang") to fix it */
+
+  printf("%c\n", *++ptr);
+
+  return 0;
+}
+/* Output:
+0x5615fa18c720
+a
+a
+l
+0x5615fa18c721
+0x5615fa18c722
+0x5615fa18c721
+0x5615fa18c722
+e
+x
+*/
+
+
