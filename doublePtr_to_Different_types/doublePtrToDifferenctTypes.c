@@ -93,4 +93,35 @@ e
 x
 */
 
+/************************************************************/
+/* wild/void pointer, NULL pointer, Generic pointer (Near pointer, Far pointer and Huge pointer are obsolete. modern 32/64 bit system does not support */
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#define Datatype int
+
+int main(void) {
+  //Datatype *ptr; // it is a wild/bad pointer, not initialize with any variable address
+  //*ptr = NULL; // it is a NULL pointer
+
+  /*
+  Datatype *ptr = 10;  Error:  you assign the address to 10 instead of value
+  Fix:
+  Datatype value = 10;
+  Datatype *ptr = &value;
+  *ptr = 11; */
+
+  Datatype *ptr = malloc(sizeof(Datatype));
+  *ptr = 10;
+
+  printf("%d\n", *ptr);
+  *ptr = 12;
+  
+  free(ptr);
+  printf("%d\n", *ptr); // become dangling pointer now
+
+  void *ptr1;  // Generic pointer
+
+  return 0;
+}
