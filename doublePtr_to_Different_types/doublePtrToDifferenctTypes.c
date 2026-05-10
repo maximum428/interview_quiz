@@ -171,5 +171,87 @@ int main(void) {
   c[0] = &w;
   printf("%d\n", *c[0]);
 
+  /*************************************************************/
+
+  int e = 10;
+  int f = 20;
+  int * const const_ptr = &e; // pointer is constant, pointed value can change
+  
+  *const_ptr = 15; // OK
+  //const_ptr = &f;  // ERROR
+
+  printf("%d\n", *const_ptr);
+
+  const int *ptr_const = &e;
+  // or int const *ptr_const; // pointed value is constant, pointer can change
+  
+  //*ptr_const = 15; // ERROR
+  ptr_const = &f;  // OK
+
+  printf("%d\n", *ptr_const);
+
+  // Important Note: This does NOT necessarily mean f itself is constant.
+  f = 99;
+  printf("%d\n", f);
+  printf("%d\n", *ptr_const);
+
+
+
+  const int * const const_ptr_const = &e; // pointer cannot change, pointed value cannot change
+
+  // *const_ptr_const = 15; // ERROR
+  // const_ptr_const = &y; // ERROR
+
+  printf("%d\n", *const_ptr_const);
+
+
+  /***********************************/
+  Datatype * const a1[2] = {&e, &f}; //An array of 10 constant pointers to int
+
+  *a1[0] = 100; // OK
+  // a1[0] = &f;  // ERROR
+  printf("%d\n", e);
+
+
+  const Datatype *a2[10]; // an array of 10 pointers to constant int
+  a2[0] = &e;   // OK
+  a2[1] = &f;   // OK
+  // *a2[0] = 100; // ERROR
+
+  printf("%d\n", *a2[0]);
+
+  const Datatype * const a3[2] = {&e, &f};  // An array of 10 constant pointers to constant int
+  // *a3[0] = 100;  // ERROR
+  // a3[0] = &f;   // ERROR
+
+  printf("%d\n", *a3[0]);
+
+
+  /*** Simple mental trick ***/
+  /*
+  const AFTER *
+  * const <-- means pointer is constant
+
+  const BEFORE type
+  const int * <-- means pointed value is constant
+
+
+  Summary Table
+  Declaration                Meaning                            Change pointer?       Change value?
+  int * const a[10]          array of constant int pointers        NO                    YES
+  const int *a[10]           array of pointers to constant int    YES                    NO
+  const int * const a[10]    array of constant pointers to
+                              constant int                        NO                     NO
+
+--------------------------------------------------------------------------------------------------
+   Element types
+   Array                        Each element type
+   aa                            int * const
+   a                             const int *
+   b                             const int * const
+  */
+
+  
+
   return 0;
 }
