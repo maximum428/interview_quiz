@@ -125,3 +125,51 @@ int main(void) {
 
   return 0;
 }
+
+/************************************************************************/
+/* Array, pointer */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define Datatype int
+
+int main(void) {
+  Datatype *a[10];  // An array of 10 pointers to int. Each element stores an int*
+  //Datatype (*b)[10]; // A pointer to an array o 10 ints
+  //Datatype *(a[10]);  // An array of 10 pointers to int. Same as declaration #1
+
+  for (int i = 0; i < 10; i++) {
+    Datatype n = i + 1;
+    a[i] = &n;
+    printf("%p\n", a[i]);
+    printf("%d\n", *a[i]);
+  }
+
+  Datatype x = 10, y = 20, z = 30;
+
+  a[0] = &x;
+  a[1] = &y;
+  a[2] = &z;
+
+  printf("%d\n", *a[0]);
+  printf("%d\n", *a[1]);
+  printf("%d\n", *a[2]);
+
+
+  int arr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+  Datatype (*b)[10] = &arr; // A pointer to an array o 10 ints = &arr;
+
+  printf("%d\n", (*b)[0]);
+  printf("%d\n", (*b)[5]);
+
+
+  int w = 100;
+
+  int *(c[10]);
+  c[0] = &w;
+  printf("%d\n", *c[0]);
+
+  return 0;
+}
