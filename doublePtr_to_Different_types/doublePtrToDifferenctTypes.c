@@ -255,3 +255,34 @@ int main(void) {
 
   return 0;
 }
+
+
+
+#include <stdio.h>
+
+int main(void) {
+  int a[5] = {10, 20, 30, 40, 50};
+  // *(a+i) = *(i+a) = a[i] = i[a]
+
+  printf("%d\n", a[2]);
+  printf("%d\n", *(a+2));
+  printf("%d\n", *(2+a));
+  printf("%d\n", 2[a]);
+
+  // 4-dimentional array element
+  // *(*(*(*(a+i)+j)+k)+l) = a[i][j][k][l]
+  int b[1][1][1][1] = {{{{999}}}};
+
+  printf("%d\n", b[0][0][0][0]);
+  printf("%d\n", *(*(*(*(b+0)+0)+0)+0));
+
+  int arr[3] = {10, 20, 30};
+  int *p;
+  p = arr;
+  printf("%d\n", *p);
+  p = &arr[0];
+  printf("%d\n", *p);
+
+  
+  return 0;
+}
