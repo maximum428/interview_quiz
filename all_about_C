@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+__attribute__((constructor))
+void startup(void) {
+  printf("Before main()\n");
+}
+
+__attribute__((destructor))
+void cleanup(void) {
+  printf("After main()\n");
+}
+
+#include <stdlib.h>
+
+void clean_up(void) {
+  printf("Program exiting...\n");
+}
+
+int main(void) {
+
+  atexit(clean_up);
+  printf("Inside main()\n");
+
+  return 0;
+}
+
+/* Output:
+Before main()
+Inside main()
+Program exiting...
+After main()
+*/
