@@ -107,6 +107,25 @@ str[i] -= 32;
 or
 str[i] += ('Z' - 'z');
 
+// Switdh between lower and upper case
+string = "alex";
+for (int i = 0; i < 5; i++)
+    s[0] ^= (1 << 5);
+
+/* result:
+    Alex
+    alex
+    Alex
+    alex */
+
+它利用 ASCII 特性切換大小寫：
+
+'a' <-> 'A'
+'b' <-> 'B'
+
+因為大小寫字母的 ASCII 差距是 32，也就是 1 << 5。
+
+
 // Convert upper case to lower case
 str[i] += 32;
 or
