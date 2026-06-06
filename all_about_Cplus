@@ -1,0 +1,284 @@
+1. static_cast
+
+最常用。
+
+用於： 相關型別之間的轉換
+
+例如：
+
+int -> double
+double -> int
+base* -> derived* (你自己保證安全)
+void* -> T*
+
+static_cast 特性
+Compile-time cast
+No runtime check
+Fast
+
+Example 1
+double d = 3.14;
+
+int x = static_cast<int>(d);
+
+cout << x;
+
+輸出：
+
+3
+Example 2
+class Base {};
+class Derived : public Base {};
+
+Derived d;
+Base* p = static_cast<Base*>(&d);
+合法。
+
+Example 3
+向下轉型
+
+Base* p = new Derived();
+Derived* d =
+    static_cast<Derived*>(p);
+
+編譯通過。
+
+但：
+Base* p = new Base();
+Derived* d =
+    static_cast<Derived*>(p);
+
+也會通過！
+
+此時：
+
+Undefined Behavior
+
+因為 static_cast 不做 runtime check。
+
+==========================================================
+2. dynamic_cast
+
+專門處理：
+
+Polymorphism
+
+即：
+
+virtual
+
+的 class hierarchy。
+
+Example
+class Base {
+public:
+    virtual ~Base() {}
+};
+
+class Derived : public Base {};
+Base* p = new Derived();
+
+Derived* d =
+    dynamic_cast<Derived*>(p);
+
+成功：
+
+d != nullptr
+Example
+Base* p = new Base();
+
+Derived* d =
+    dynamic_cast<Derived*>(p);
+
+失敗：
+
+d == nullptr
+static_cast vs dynamic_cast
+static_cast
+Derived* d =
+    static_cast<Derived*>(p);
+
+編譯通過。
+
+但：
+
+可能 crash
+dynamic_cast
+Derived* d =
+    dynamic_cast<Derived*>(p);
+
+會檢查真正型別。
+
+比較安全。
+
+dynamic_cast 必要條件
+
+至少一個 virtual function：
+
+class Base {
+public:
+    virtual ~Base(){}
+};
+
+因為需要 RTTI：
+
+Run-Time Type Information
+dynamic_cast reference
+
+pointer：
+
+Derived* d =
+    dynamic_cast<Derived*>(p);
+
+失敗：
+
+nullptr
+
+reference：
+
+Derived& d =
+    dynamic_cast<Derived&>(obj);
+
+失敗：
+
+std::bad_cast
+==========================================================
+
+3. const_cast
+
+唯一用途：
+
+移除或增加 const
+Example
+void func(char* p)
+{
+}
+const char* s = "hello";
+
+func(const_cast<char*>(s));
+Example
+const int x = 10;
+
+int* p =
+    const_cast<int*>(&x);
+
+編譯通過。
+
+但：
+
+*p = 20;
+
+是：
+
+Undefined Behavior
+
+因為原本物件就是 const。
+
+合法用途
+void foo(int* p)
+{
+}
+int x = 10;
+
+const int* cp = &x;
+
+foo(const_cast<int*>(cp));
+
+安全。
+
+因為：
+
+x 本來不是 const
+
+只是 pointer 宣告成 const。
+
+const_cast 特性
+
+只能改：
+
+const
+volatile
+
+不能改型別。
+==========================================================
+
+4. reinterpret_cast
+
+最危險。
+
+用於：
+
+Bit-level reinterpretation
+Example
+int x = 65;
+
+char* p =
+    reinterpret_cast<char*>(&x);
+
+直接把：
+
+int*
+
+看成：
+
+char*
+Example
+uintptr_t addr =
+    reinterpret_cast<uintptr_t>(ptr);
+
+pointer → integer
+
+Example
+void* p = malloc(100);
+
+MyClass* obj =
+    reinterpret_cast<MyClass*>(p);
+
+編譯可以。
+
+但：
+
+不代表真的有 MyClass
+reinterpret_cast 特性
+No check
+Dangerous
+Platform dependent
+
+通常：
+
+Driver
+Kernel
+Embedded
+Memory Mapping
+
+才會看到。
+
+C-style Cast
+Derived* d = (Derived*)p;
+
+或
+
+int x = (int)d;
+
+問題：
+
+你不知道編譯器做了什麼。
+
+可能是：
+
+static_cast
+const_cast
+reinterpret_cast
+
+甚至混合。
+
+因此現代 C++ 不推薦。
+==========================================================
+
+面試總整理
+Cast	                用途	    Runtime Check	  安全性
+static_cast	      一般型別轉換	    No	          中
+dynamic_cast	    多型向下轉型	    Yes	          高
+const_cast	      移除 const	      No	          中
+reinterpret_cast	位元重新解讀	    No	          低
+C-style cast	    舊語法	          No	          最差
