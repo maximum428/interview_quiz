@@ -70,6 +70,30 @@ int main(int argc, char** argv) {
     printf("Read value : %d\n", data_in);
     return 0;
 }
+----------------------------------------------------------------------------
+use std::fs::File;
+use std::io::{self, Read, Write};
+
+fn main() -> io::Result<()> {
+    let data_out: i32 = 1234;
+    let mut data_in: i32 = 0;
+
+    {
+        let mut file = File::create("data.bin")?;
+        file.write_all(&data_out.to_ne_bytes())?;
+    }
+    {
+        let mut file = File::open("data.bin")?;
+
+        let mut buffer = [0u8; 4];
+        file.read_exact(&mut buffer)?;
+
+        data_in = i32::from_ne_bytes(buffer);
+    }
+    println!("Read value: {}", data_in);
+
+    Ok(())
+}
 /*************************************************************************/
 /*** Example 3: Write & Read a Text File (C++ fstream) ***/
 #include <iostream>
