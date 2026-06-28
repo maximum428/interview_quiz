@@ -594,6 +594,90 @@ int main() {
     }
     return 0;
 }
+---------------------------------------------------------------------
+const RING_BUFFER_SIZE: usize = 8;
+
+struct RingBuffer {
+    head: usize,
+    tail: usize,
+    capacity: usize,
+    buffer: Vec<u8>,
+}
+
+impl RingBuffer {
+    fn new() -> Self {
+        Self::with_capacity(RING_BUFFER_SIZE).unwrap()
+    }
+    fn with_capacity(cap: usize) -> Result<Self, String> {
+        if cap < 2 {
+            return Err("capacity must be >= 2".to_string());
+        }
+
+        Ok(Self {
+            head: 0,
+            tail: 0,
+            capacity: cap,
+            buffer: vec![0; cap],
+        })
+    }
+    fn is_full(&self) -> bool {
+        (self.head + 1) % self.capacity == self.tail
+    }
+    fn is_empty(&self) -> bool {
+        self.head == self.tail
+    }
+    fn set_capacity(&mut self, cap: usize) -> Result<(), String> {
+        if cap < 2 {
+            return Err("capacity must be >= 2".to_string());
+        }
+
+        self.buffer = vec![0; cap];
+        self.capacity = cap;
+        self.head = 0;
+        self.tail = 0;
+
+        Ok(())
+    }
+
+    fn write(&mut self, data: u8) -> bool {
+        if self.is_full() {
+            return false;
+        }
+        self.buffer[self.head] = data;
+        self.head = (self.head + 1) % self.capacity;
+
+        true
+    }
+
+    fn read(&mut self) -> Option<u8> {
+        if self.is_empty() {
+            return None;
+        }
+        let data = self.buffer[self.tail];
+        self.tail = (self.tail + 1) % self.capacity;
+
+        Some(data)
+    }
+}
+
+fn main() {
+    let mut rb = RingBuffer::new();
+
+    println!("{}", rb.is_full());
+    println!("{}", rb.is_empty());
+
+    rb.set_capacity(16).unwrap();
+    println!("{}", rb.is_empty());
+
+    rb.write(10);
+    rb.write(20);
+    rb.write(30);
+
+    while let Some(value) = rb.read() {
+        println!("Value: {}", value);
+    }
+}
+
 
 
 
