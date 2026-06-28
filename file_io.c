@@ -26,6 +26,30 @@ int main(int argc, char** argv) {
     fclose(fp);
     return 0;
 }
+-----------------------------------------------------------------------------
+use std::fs::File;
+use std::io::{self, Write, BufRead, BufReader};
+
+fn main() -> io::Result<()> {
+    // Open file for writing
+    let mut file = File::create("example.txt")?;
+
+    writeln!(file, "Hello, File I/O in C!")?;
+    writeln!(file, "This is a second line.")?;
+
+    // File is automatically close when it goes out of scope
+    drop(file);
+
+    // Open file for reading
+    let file = File::open("example.txt")?;
+    let reader = BufReader::new(file);
+
+    for line in reader.lines() {
+        println!("{}", line?);
+    }
+
+    Ok(())
+}
 /*************************************************************************/
 /*** Example 2: Binary read/write (important for embedded / systems) ***/
 #include <stdio.h>
