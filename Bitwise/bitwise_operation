@@ -70,9 +70,22 @@ res = num & mask;
 // or
 res = (num >> pos) & ((1U << len) - 1U);
 
-// 14. Find number of bits
+// 14. How many bits required to compose num. 需要多少個 Binary Bits 來表示.  for example: num 68 的二進位表示是 1000100，需要 7 bits。
 int x = log2(num) + 1;   // ex.  num = 20 = 0001 0100, x = 5 (remove leading zero, and get the number of bits from leftmost bit of value 1)
                          //      num = 35 = 0010 0100, x = 6 (remove leading zero, and get the number of bist from leftmost bit of value 1)
+
+// 15.  count the number of bits which is 1
+int count = 0;
+while (num != 0) {
+    num &= (num - 1);
+    count++;
+}
+// or
+int count = 0;
+while (num != 0) {
+    count += num & 1U;
+    num >>= 1;
+}
 
 // Note:  1 << n  means 1 is at the position of n+1
 ex:
